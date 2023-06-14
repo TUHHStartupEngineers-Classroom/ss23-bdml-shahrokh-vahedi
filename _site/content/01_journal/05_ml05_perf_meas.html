@@ -169,7 +169,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
  <span class="dropdown-text">05 Performance Measures</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../content/01_journal/06_ml06_lime.rmd">
+    <a class="dropdown-item" href="../../content/01_journal/06_ml06_lime.html">
  <span class="dropdown-text">06 Explaining Black-Box Models With LIME</span></a>
   </li>  
     </ul>
@@ -238,12 +238,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><span style="color:red;">Illegal argument: training_frame of function: grid: Cannot append new models to a grid with different training input</span></p>
 <p><span style="color:red;">Calls: <anonymous> … eval -&gt; h2o.grid -&gt; .h2o.__remoteSend -&gt; .h2o.doSafeREST</anonymous></span></p>
 <p><span style="color:red;">Execution halted </span></p>
-<p>Therefore, I stopped the R code chunks to be run but shown (using eval = FALSE), and instead I added the images of plots in the respected section.</p>
+<p>Therefore, I stopped the R code chunks to be run but shown (using eval = FALSE), and instead I added the images of plots (which I got by running the code chunk by chunk) in the respected section.</p>
 <section id="leaderboard-visualization" class="level1" data-number="1"><h1 data-number="1">
 <span class="header-section-number">1</span> Leaderboard visualization</h1>
 <section id="load-the-training-test-dataset" class="level2" data-number="1.1"><h2 data-number="1.1" class="anchored" data-anchor-id="load-the-training-test-dataset">
 <span class="header-section-number">1.1</span> Load the training &amp; test dataset</h2>
-<div class="cell" data-hash="05_ml05_perf_meas_cache/html/unnamed-chunk-1_a024140f725bfa28a72b7ca7576e0351">
+<div class="cell" data-hash="05_ml05_perf_meas_cache/html/unnamed-chunk-1_37697094be82b01fec817db582e76ae4">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="fu">library</span>(yardstick)</span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="fu">library</span>(workflows)</span>
@@ -262,7 +262,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </section><section id="specifiy-the-response-and-predictor-variables" class="level2" data-number="1.2"><h2 data-number="1.2" class="anchored" data-anchor-id="specifiy-the-response-and-predictor-variables">
 <span class="header-section-number">1.2</span> Specifiy the response and predictor variables</h2>
-<div class="cell" data-hash="05_ml05_perf_meas_cache/html/unnamed-chunk-2_10c97b86e092e327e8ee7aa1613b645f">
+<div class="cell" data-hash="05_ml05_perf_meas_cache/html/unnamed-chunk-2_56ef6ffb59ff7cac26412b5b9f4a6f17">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>recipe_obj <span class="ot">&lt;-</span> <span class="fu">recipe</span>(product_backorder <span class="sc">~</span>., <span class="at">data =</span> train_tbl) <span class="sc">%&gt;%</span> </span>
 <span id="cb2-2"><a href="#cb2-2"></a>    <span class="fu">step_zv</span>(<span class="fu">all_predictors</span>()) <span class="sc">%&gt;%</span> </span>
 <span id="cb2-3"><a href="#cb2-3"></a>    <span class="fu">step_dummy</span>(<span class="fu">all_nominal</span>(),<span class="sc">-</span><span class="fu">all_outcomes</span>()) <span class="sc">%&gt;%</span></span>
@@ -272,7 +272,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </section><section id="run-automl-specifying-the-stopping-criterion" class="level2" data-number="1.3"><h2 data-number="1.3" class="anchored" data-anchor-id="run-automl-specifying-the-stopping-criterion">
 <span class="header-section-number">1.3</span> run AutoML specifying the stopping criterion</h2>
-<div class="cell" data-hash="05_ml05_perf_meas_cache/html/unnamed-chunk-3_2f4ab08e63ff94029d91677f5ec82d2e">
+<div class="cell" data-hash="05_ml05_perf_meas_cache/html/unnamed-chunk-3_8a015d94245829f24f6af5bcaf1093c3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">library</span>(h2o)</span>
 <span id="cb3-2"><a href="#cb3-2"></a><span class="fu">h2o.init</span>()</span>
 <span id="cb3-3"><a href="#cb3-3"></a>split_h2o <span class="ot">&lt;-</span> <span class="fu">h2o.splitFrame</span>(<span class="fu">as.h2o</span>(train_tbl), <span class="at">ratios =</span> <span class="fu">c</span>(<span class="fl">0.75</span>), <span class="at">seed =</span> <span class="dv">42</span>)</span>
@@ -297,7 +297,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </section><section id="leaderboard-visualization-1" class="level2" data-number="1.4"><h2 data-number="1.4" class="anchored" data-anchor-id="leaderboard-visualization-1">
 <span class="header-section-number">1.4</span> Leaderboard visualization</h2>
-<div class="cell" data-hash="05_ml05_perf_meas_cache/html/unnamed-chunk-4_e67acc4412b422917fda9a59c375bc42">
+<div class="cell" data-hash="05_ml05_perf_meas_cache/html/unnamed-chunk-4_686a4ba795bd9874402539b0b9e9dabf">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>automl_models_h2o<span class="sc">@</span>leaderboard </span>
 <span id="cb4-2"><a href="#cb4-2"></a></span>
 <span id="cb4-3"><a href="#cb4-3"></a><span class="fu">summary</span>(automl_models_h2o<span class="sc">@</span>leaderboard <span class="sc">%&gt;%</span> <span class="fu">as_tibble</span>() )</span>
@@ -333,13 +333,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb4-33"><a href="#cb4-33"></a>        <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><a href="../../assets/img/05_images/1.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Fig. 1 LeaderBoard Visualization"><img src="../../assets/img/05_images/1.jpg" class="img-fluid figure-img"></a></p>
+<figure class="figure"><p><a href="../../assets/img/05_images/1.jpg" class="lightbox" title="Fig. 1 LeaderBoard Visualization" data-gallery="quarto-lightbox-gallery-1"><img src="../../assets/img/05_images/1.jpg" class="img-fluid figure-img"></a></p>
 <p></p><figcaption class="figure-caption">Fig. 1 LeaderBoard Visualization</figcaption><p></p>
 </figure>
 </div>
 </section></section><section id="tune-a-model-with-grid-search" class="level1" data-number="2"><h1 data-number="2">
 <span class="header-section-number">2</span> Tune a model with grid search</h1>
-<div class="cell" data-hash="05_ml05_perf_meas_cache/html/unnamed-chunk-5_3c9ff3eabcccb56b630d7e39db338859">
+<div class="cell" data-hash="05_ml05_perf_meas_cache/html/unnamed-chunk-5_ea5fba9e880a98aa1ddd124700096048">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>deeplearning_grid_01 <span class="ot">&lt;-</span> <span class="fu">h2o.grid</span>(</span>
 <span id="cb5-2"><a href="#cb5-2"></a>    <span class="co"># See help page for available algos</span></span>
 <span id="cb5-3"><a href="#cb5-3"></a>    <span class="at">algorithm =</span> <span class="st">"deeplearning"</span>,</span>
@@ -376,7 +376,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </section><section id="visualize-the-trade-of-between-the-precision-and-the-recall-and-the-optimal-threshold" class="level1" data-number="3"><h1 data-number="3">
 <span class="header-section-number">3</span> Visualize the trade of between the precision and the recall and the optimal threshold</h1>
-<div class="cell" data-hash="05_ml05_perf_meas_cache/html/unnamed-chunk-6_6e3f8c4df84bc39756172b5d300d83b6">
+<div class="cell" data-hash="05_ml05_perf_meas_cache/html/unnamed-chunk-6_389ea62e07a2201cf3841e45b566ea3d">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>theme_new <span class="ot">&lt;-</span> <span class="fu">theme</span>(</span>
 <span id="cb6-2"><a href="#cb6-2"></a>      <span class="at">legend.position  =</span> <span class="st">"bottom"</span>,</span>
 <span id="cb6-3"><a href="#cb6-3"></a>      <span class="at">legend.key       =</span> <span class="fu">element_blank</span>(),,</span>
@@ -409,11 +409,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb6-30"><a href="#cb6-30"></a>best_model <span class="sc">%&gt;%</span> <span class="fu">h2o.saveModel</span>(<span class="at">path =</span> <span class="st">"model05"</span>,<span class="at">force =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><a href="../../assets/img/05_images/2.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Fig. 2 Precision vs.&nbsp;Recall"><img src="../../assets/img/05_images/2.jpg" class="img-fluid figure-img"></a></p>
+<figure class="figure"><p><a href="../../assets/img/05_images/2.jpg" class="lightbox" title="Fig. 2 Precision vs.&nbsp;Recall" data-gallery="quarto-lightbox-gallery-2"><img src="../../assets/img/05_images/2.jpg" class="img-fluid figure-img"></a></p>
 <p></p><figcaption class="figure-caption">Fig. 2 Precision vs.&nbsp;Recall</figcaption><p></p>
 </figure>
 </div>
-<div class="cell" data-hash="05_ml05_perf_meas_cache/html/unnamed-chunk-7_ec1e666eba53fc45973e7eb418029036">
+<div class="cell" data-hash="05_ml05_perf_meas_cache/html/unnamed-chunk-7_005c34cd01f0dbbaf7e7202b3fc778cd">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>load_model_performance_metrics <span class="ot">&lt;-</span> <span class="cf">function</span>(path, test_tbl) {</span>
 <span id="cb7-2"><a href="#cb7-2"></a>    </span>
 <span id="cb7-3"><a href="#cb7-3"></a>    model_h2o <span class="ot">&lt;-</span> <span class="fu">h2o.loadModel</span>(path)</span>
@@ -429,7 +429,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </section><section id="roc-plot" class="level1" data-number="4"><h1 data-number="4">
 <span class="header-section-number">4</span> ROC Plot</h1>
-<div class="cell" data-hash="05_ml05_perf_meas_cache/html/unnamed-chunk-8_13e25bb19f36947aed31c77174b02942">
+<div class="cell" data-hash="05_ml05_perf_meas_cache/html/unnamed-chunk-8_1130b5a00b5f05751e16b8457dfc3265">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>model_metrics_tbl <span class="ot">&lt;-</span> fs<span class="sc">::</span><span class="fu">dir_info</span>(<span class="at">path =</span> <span class="st">"model05"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb8-2"><a href="#cb8-2"></a>    <span class="fu">select</span>(path) <span class="sc">%&gt;%</span></span>
 <span id="cb8-3"><a href="#cb8-3"></a>    <span class="fu">mutate</span>(<span class="at">metrics =</span> <span class="fu">map</span>(path, load_model_performance_metrics, test_tbl)) <span class="sc">%&gt;%</span></span>
@@ -459,13 +459,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb8-27"><a href="#cb8-27"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><a href="../../assets/img/05_images/3.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Fig. 3 ROC Plot"><img src="../../assets/img/05_images/3.jpg" class="img-fluid figure-img"></a></p>
+<figure class="figure"><p><a href="../../assets/img/05_images/3.jpg" class="lightbox" title="Fig. 3 ROC Plot" data-gallery="quarto-lightbox-gallery-3"><img src="../../assets/img/05_images/3.jpg" class="img-fluid figure-img"></a></p>
 <p></p><figcaption class="figure-caption">Fig. 3 ROC Plot</figcaption><p></p>
 </figure>
 </div>
 </section><section id="precision-vs-recall-plot" class="level1" data-number="5"><h1 data-number="5">
 <span class="header-section-number">5</span> Precision vs Recall Plot</h1>
-<div class="cell" data-hash="05_ml05_perf_meas_cache/html/unnamed-chunk-9_60766349de2d68e95683b92ad1157733">
+<div class="cell" data-hash="05_ml05_perf_meas_cache/html/unnamed-chunk-9_5127a7917db695ca5e4cdfd1ac675f10">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>model_metrics_tbl <span class="sc">%&gt;%</span></span>
 <span id="cb9-2"><a href="#cb9-2"></a>    <span class="fu">mutate</span>(</span>
 <span id="cb9-3"><a href="#cb9-3"></a>        <span class="at">path =</span> <span class="fu">str_split</span>(path, <span class="at">pattern =</span> <span class="st">"/"</span>, <span class="at">simplify =</span> T)[,<span class="dv">2</span>] <span class="sc">%&gt;%</span> <span class="fu">as_factor</span>(),</span>
@@ -483,13 +483,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb9-15"><a href="#cb9-15"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><a href="../../assets/img/05_images/4.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Fig. 4 Precision vs.&nbsp;Recall Plot"><img src="../../assets/img/05_images/4.jpg" class="img-fluid figure-img"></a></p>
+<figure class="figure"><p><a href="../../assets/img/05_images/4.jpg" class="lightbox" title="Fig. 4 Precision vs.&nbsp;Recall Plot" data-gallery="quarto-lightbox-gallery-4"><img src="../../assets/img/05_images/4.jpg" class="img-fluid figure-img"></a></p>
 <p></p><figcaption class="figure-caption">Fig. 4 Precision vs.&nbsp;Recall Plot</figcaption><p></p>
 </figure>
 </div>
 </section><section id="gain-plot" class="level1" data-number="6"><h1 data-number="6">
 <span class="header-section-number">6</span> Gain Plot</h1>
-<div class="cell" data-hash="05_ml05_perf_meas_cache/html/unnamed-chunk-10_906f15c030e9acb036017bfe5934b397">
+<div class="cell" data-hash="05_ml05_perf_meas_cache/html/unnamed-chunk-10_cb0de4fa158bf49ee2855f7e0b8dacca">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>gain_lift_tbl <span class="ot">&lt;-</span> performance_h2o <span class="sc">%&gt;%</span></span>
 <span id="cb10-2"><a href="#cb10-2"></a>    <span class="fu">h2o.gainsLift</span>() <span class="sc">%&gt;%</span></span>
 <span id="cb10-3"><a href="#cb10-3"></a>    <span class="fu">as.tibble</span>()</span>
@@ -513,13 +513,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb10-21"><a href="#cb10-21"></a>    theme_new</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><a href="../../assets/img/05_images/5.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Fig. 5 Gain Plot"><img src="../../assets/img/05_images/5.jpg" class="img-fluid figure-img"></a></p>
+<figure class="figure"><p><a href="../../assets/img/05_images/5.jpg" class="lightbox" title="Fig. 5 Gain Plot" data-gallery="quarto-lightbox-gallery-5"><img src="../../assets/img/05_images/5.jpg" class="img-fluid figure-img"></a></p>
 <p></p><figcaption class="figure-caption">Fig. 5 Gain Plot</figcaption><p></p>
 </figure>
 </div>
 </section><section id="lift-plot" class="level1" data-number="7"><h1 data-number="7">
 <span class="header-section-number">7</span> Lift Plot</h1>
-<div class="cell" data-hash="05_ml05_perf_meas_cache/html/unnamed-chunk-11_007ecb5cdf237e2bb842098b5685bfed">
+<div class="cell" data-hash="05_ml05_perf_meas_cache/html/unnamed-chunk-11_8d02697c0bf6a8459a4cd969dfd6d7ed">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>lift_transformed_tbl <span class="ot">&lt;-</span> gain_lift_tbl <span class="sc">%&gt;%</span> </span>
 <span id="cb11-2"><a href="#cb11-2"></a>    <span class="fu">select</span>(group, cumulative_data_fraction, cumulative_capture_rate, cumulative_lift) <span class="sc">%&gt;%</span></span>
 <span id="cb11-3"><a href="#cb11-3"></a>    <span class="fu">select</span>(<span class="sc">-</span><span class="fu">contains</span>(<span class="st">"capture"</span>)) <span class="sc">%&gt;%</span></span>
@@ -538,13 +538,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb11-16"><a href="#cb11-16"></a>    theme_new</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><a href="../../assets/img/05_images/6.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Fig. 6 Lift Plot"><img src="../../assets/img/05_images/6.jpg" class="img-fluid figure-img"></a></p>
+<figure class="figure"><p><a href="../../assets/img/05_images/6.jpg" class="lightbox" title="Fig. 6 Lift Plot" data-gallery="quarto-lightbox-gallery-6"><img src="../../assets/img/05_images/6.jpg" class="img-fluid figure-img"></a></p>
 <p></p><figcaption class="figure-caption">Fig. 6 Lift Plot</figcaption><p></p>
 </figure>
 </div>
 </section><section id="dashboard-with-cowplot" class="level1" data-number="8"><h1 data-number="8">
 <span class="header-section-number">8</span> Dashboard with cowplot</h1>
-<div class="cell" data-hash="05_ml05_perf_meas_cache/html/unnamed-chunk-12_af3428b2c2d1c4fd6600fbcd84319ddc">
+<div class="cell" data-hash="05_ml05_perf_meas_cache/html/unnamed-chunk-12_b2fa52eb6540ae09ce331d6df385e09d">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">library</span>(cowplot)</span>
 <span id="cb12-2"><a href="#cb12-2"></a><span class="fu">library</span>(glue)</span>
 <span id="cb12-3"><a href="#cb12-3"></a></span>
@@ -735,7 +735,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb12-188"><a href="#cb12-188"></a>                         <span class="at">size =</span> <span class="fl">0.5</span>, <span class="at">max_models =</span> <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><a href="../../assets/img/05_images/7.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Fig. 7 Dashboard with cowplot"><img src="../../assets/img/05_images/7.jpg" class="img-fluid figure-img"></a></p>
+<figure class="figure"><p><a href="../../assets/img/05_images/7.jpg" class="lightbox" title="Fig. 7 Dashboard with cowplot" data-gallery="quarto-lightbox-gallery-7"><img src="../../assets/img/05_images/7.jpg" class="img-fluid figure-img"></a></p>
 <p></p><figcaption class="figure-caption">Fig. 7 Dashboard with cowplot</figcaption><p></p>
 </figure>
 </div>
@@ -990,7 +990,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
-<script>var lightboxQuarto = GLightbox({"loop":true,"selector":".lightbox","closeEffect":"zoom","descPosition":"bottom","openEffect":"zoom"});</script>
+<script>var lightboxQuarto = GLightbox({"selector":".lightbox","descPosition":"bottom","closeEffect":"zoom","loop":true,"openEffect":"zoom"});</script>
 
 
 </body></html>

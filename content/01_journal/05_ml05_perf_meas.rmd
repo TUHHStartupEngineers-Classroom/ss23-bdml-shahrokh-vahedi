@@ -30,7 +30,7 @@ ERROR MESSAGE:
                                                                                                   
 <span style="color:red;">Execution halted </span>
 
-Therefore, I stopped the R code chunks to be run but shown (using eval = FALSE), and instead I added the images of plots in the respected section.
+Therefore, I stopped the R code chunks to be run but shown (using eval = FALSE), and instead I added the images of plots (which I got by running the code chunk by chunk) in the respected section.
            
 
 # Leaderboard visualization
