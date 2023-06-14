@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.335">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta name="author" content="Shahrokh Vahedi">
+<meta name="dcterms.date" content="2023-06-10">
+<title>Business Decisions with Machine Learning - 02 Supervised ML - Regression (II)</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark"><script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script><link href="../../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="../../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+</head>
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg navbar-dark "><div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Business Decisions with Machine Learning</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+<li class="nav-item">
+    <a class="nav-link" href="../../index.html">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-journal" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Journal</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-journal">
+<li>
+    <a class="dropdown-item" href="../../content/01_journal/01_ml01_ml_fund.html">
+ <span class="dropdown-text">01 Machine Learning Fundamentals</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../content/01_journal/02_ml02_sup_ML.html">
+ <span class="dropdown-text">02 Supervised ML - Regression</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../content/01_journal/03_ml03_h2oI.html">
+ <span class="dropdown-text">03 Automated Machine Learning with H2O (I)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../content/01_journal/04_ml04_h2oII.html">
+ <span class="dropdown-text">04 Automated Machine Learning with H2O (II)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../content/01_journal/05_ml05_perf_meas.html">
+ <span class="dropdown-text">05 Performance Measures</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../content/01_journal/06_ml06_lime.html">
+ <span class="dropdown-text">06 Explaining Black-Box Models With LIME</span></a>
+  </li>  
+    </ul>
+</li>
+</ul>
+<div class="quarto-toggle-container">
+                  <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+              </div>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Contents</h2>
+   
+  <ul class="collapse">
+<li><a href="#library-import" id="toc-library-import" class="nav-link active" data-scroll-target="#library-import"><span class="toc-section-number">1</span>  Library Import</a></li>
+  <li>
+<a href="#data-preparation-feature-engineering" id="toc-data-preparation-feature-engineering" class="nav-link" data-scroll-target="#data-preparation-feature-engineering"><span class="toc-section-number">2</span>  Data Preparation &amp; Feature Engineering</a>
+  <ul class="collapse">
+<li><a href="#initial-processing" id="toc-initial-processing" class="nav-link" data-scroll-target="#initial-processing"><span class="toc-section-number">2.1</span>  Initial processing</a></li>
+  <li><a href="#splitting-the-data-and-building-features-using-recipes" id="toc-splitting-the-data-and-building-features-using-recipes" class="nav-link" data-scroll-target="#splitting-the-data-and-building-features-using-recipes"><span class="toc-section-number">2.2</span>  Splitting the Data and Building features using recipes</a></li>
+  </ul>
+</li>
+  <li><a href="#xgboost-building" id="toc-xgboost-building" class="nav-link" data-scroll-target="#xgboost-building"><span class="toc-section-number">3</span>  XGBOOST Building</a></li>
+  <li><a href="#bundling-the-model-and-recipe-with-the-workflow-package" id="toc-bundling-the-model-and-recipe-with-the-workflow-package" class="nav-link" data-scroll-target="#bundling-the-model-and-recipe-with-the-workflow-package"><span class="toc-section-number">4</span>  Bundling the model and recipe with the workflow package</a></li>
+  <li><a href="#evaluating-the-model-with-the-yardstick-package" id="toc-evaluating-the-model-with-the-yardstick-package" class="nav-link" data-scroll-target="#evaluating-the-model-with-the-yardstick-package"><span class="toc-section-number">5</span>  Evaluating the model with the yardstick package</a></li>
+  <li><a href="#tuning-the-model" id="toc-tuning-the-model" class="nav-link" data-scroll-target="#tuning-the-model"><span class="toc-section-number">6</span>  Tuning the Model</a></li>
+  </ul></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<h1 class="title">02 Supervised ML - Regression (II)</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Shahrokh Vahedi </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">June 10, 2023</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header><section id="library-import" class="level1" data-number="1"><h1 data-number="1">
+<span class="header-section-number">1</span> Library Import</h1>
+<div class="cell" data-hash="02_ml02_sup_ML_cache/html/unnamed-chunk-1_02d4a5b181f6420edb64d77d029c1616">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">library</span>(parsnip)</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="fu">library</span>(yardstick)</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="fu">library</span>(workflows)</span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="fu">library</span>(tune)</span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="fu">library</span>(xgboost)</span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="fu">library</span>(recipes)</span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="fu">library</span>(rsample)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section><section id="data-preparation-feature-engineering" class="level1" data-number="2"><h1 data-number="2">
+<span class="header-section-number">2</span> Data Preparation &amp; Feature Engineering</h1>
+<div class="cell" data-hash="02_ml02_sup_ML_cache/html/unnamed-chunk-2_f94eecbf1e17632874738ac4fab8978f">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>bike_features_tbl <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"data02/bike_features_tbl.rds"</span>) <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(<span class="st">"Brake Rotor"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-hash="02_ml02_sup_ML_cache/html/unnamed-chunk-3_3f566247c17c7d8269b9b494bb59d920">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">glimpse</span>(bike_features_tbl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; Rows: 231
+#&gt; Columns: 66
+#&gt; $ bike_id                     &lt;dbl&gt; 2875, 2873, 2874, 2876, 2877, 2225, 2091, ~
+#&gt; $ model                       &lt;chr&gt; "Aeroad CF SL Disc 8.0 Di2", "Aeroad CF SL~
+#&gt; $ model_year                  &lt;dbl&gt; 2020, 2020, 2020, 2020, 2020, 2019, 2019, ~
+#&gt; $ frame_material              &lt;chr&gt; "carbon", "carbon", "carbon", "carbon", "c~
+#&gt; $ weight                      &lt;dbl&gt; 7.60, 7.27, 7.10, 7.73, 7.83, 6.80, 6.80, ~
+#&gt; $ price                       &lt;dbl&gt; 4579, 6919, 6429, 5069, 3609, 6139, 5359, ~
+#&gt; $ category_1                  &lt;chr&gt; "Road", "Road", "Road", "Road", "Road", "R~
+#&gt; $ category_2                  &lt;chr&gt; "Race", "Race", "Race", "Race", "Race", "R~
+#&gt; $ category_3                  &lt;chr&gt; "Aeroad", "Aeroad", "Aeroad", "Aeroad", "A~
+#&gt; $ gender                      &lt;chr&gt; "unisex", "unisex", "unisex", "unisex", "u~
+#&gt; $ url                         &lt;chr&gt; "https://www.canyon.com/en-de/road-bikes/r~
+#&gt; $ Frame                       &lt;chr&gt; "Canyon Aeroad CF SL Disc", "Canyon Aeroad~
+#&gt; $ Fork                        &lt;chr&gt; "Canyon FK0041 CF SLX Disc", "Canyon FK004~
+#&gt; $ `Rear Derailleur`           &lt;chr&gt; "Shimano Ultegra Di2 R8050 SS", "SRAM RED ~
+#&gt; $ `Front Derailleur`          &lt;chr&gt; "Shimano Ultegra Di2 R8050", "SRAM RED eTa~
+#&gt; $ Cassette                    &lt;chr&gt; "Shimano Ultegra R8000, 11-speed, 11-28T",~
+#&gt; $ Crank                       &lt;chr&gt; "Shimano Ultegra R8000", "SRAM RED D1", "S~
+#&gt; $ `Bottom bracket`            &lt;chr&gt; "Shimano Pressfit BB72", "SRAM Pressfit RE~
+#&gt; $ `Thru Axle`                 &lt;chr&gt; "Canyon Thru Axle", "Canyon Thru Axle", "C~
+#&gt; $ Cockpit                     &lt;chr&gt; "Canyon H36 Aerocockpit CF", "Canyon H36 A~
+#&gt; $ Saddle                      &lt;chr&gt; "Selle Italia SLR", "Selle Italia SLR", "S~
+#&gt; $ Seatpost                    &lt;chr&gt; "Canyon S27 Aero VCLS CF", "Canyon S27 Aer~
+#&gt; $ Pedals                      &lt;chr&gt; "None included", "None included", "None in~
+#&gt; $ `Derailleur hanger`         &lt;chr&gt; "Shop Derailleur Hanger GP0211-01", "Shop ~
+#&gt; $ Battery                     &lt;chr&gt; "", "SRAM eTap Powerpack", "", "SRAM eTap ~
+#&gt; $ Brake                       &lt;chr&gt; "", "", "", "", "", "", "", "", "", "", ""~
+#&gt; $ `Shift Lever`               &lt;chr&gt; "", "", "", "", "", "", "Shimano Di2 Remot~
+#&gt; $ Chain                       &lt;chr&gt; "", "", "", "", "", "", "Shimano CN-HG901 ~
+#&gt; $ Stem                        &lt;chr&gt; "", "", "", "", "", "", "", "Canyon V13", ~
+#&gt; $ Handlebar                   &lt;chr&gt; "", "", "", "", "", "", "", "Canyon H16 Ae~
+#&gt; $ Headset                     &lt;chr&gt; "", "", "", "", "", "", "", "", "", "", ""~
+#&gt; $ Motor                       &lt;chr&gt; "", "", "", "", "", "", "", "", "", "", ""~
+#&gt; $ `Battery Charger`           &lt;chr&gt; "", "", "", "", "", "", "", "", "", "", ""~
+#&gt; $ `Flat Pedals`               &lt;chr&gt; "", "", "", "", "", "", "", "", "", "", ""~
+#&gt; $ Chainguard                  &lt;chr&gt; "", "", "", "", "", "", "", "", "", "", ""~
+#&gt; $ `Aero Bar`                  &lt;chr&gt; "", "", "", "", "", "", "", "", "", "", ""~
+#&gt; $ `Brake Lever / Master`      &lt;chr&gt; "", "", "", "", "", "", "", "", "", "", ""~
+#&gt; $ `Wheel Tire System`         &lt;chr&gt; "", "", "", "", "", "", "", "", "", "", ""~
+#&gt; $ `Suspension Fork`           &lt;chr&gt; "", "", "", "", "", "", "", "", "", "", ""~
+#&gt; $ `Disc Brake`                &lt;chr&gt; "", "", "", "", "", "", "", "", "", "", ""~
+#&gt; $ Grips                       &lt;chr&gt; "", "", "", "", "", "", "", "", "", "", ""~
+#&gt; $ Chainring                   &lt;chr&gt; "", "", "", "", "", "", "", "", "", "", ""~
+#&gt; $ Display                     &lt;chr&gt; "", "", "", "", "", "", "", "", "", "", ""~
+#&gt; $ Modeswitch                  &lt;chr&gt; "", "", "", "", "", "", "", "", "", "", ""~
+#&gt; $ `Rear Shock`                &lt;chr&gt; "", "", "", "", "", "", "", "", "", "", ""~
+#&gt; $ Light                       &lt;chr&gt; "", "", "", "", "", "", "", "", "", "", ""~
+#&gt; $ Fender                      &lt;chr&gt; "", "", "", "", "", "", "", "", "", "", ""~
+#&gt; $ `Bike Racks`                &lt;chr&gt; "", "", "", "", "", "", "", "", "", "", ""~
+#&gt; $ `Brake 1`                   &lt;chr&gt; "", "", "", "", "", "SRAM S-900 Direct Mou~
+#&gt; $ `Brake 2`                   &lt;chr&gt; "", "", "", "", "", "SRAM S-900 Direct Mou~
+#&gt; $ `Shift-/ Brake Lever 1`     &lt;chr&gt; "Shimano Ultegra Di2 R8070, 11-speed", "SR~
+#&gt; $ `Shift-/ Brake Lever 2`     &lt;chr&gt; "Shimano Ultegra Di2 R8070, 11-speed", "SR~
+#&gt; $ `Wheel 1`                   &lt;chr&gt; "DT Swiss ARC 1400 Dicut", "DT Swiss ARC 1~
+#&gt; $ `Wheel 2`                   &lt;chr&gt; "DT Swiss ARC 1400 Dicut", "DT Swiss ARC 1~
+#&gt; $ `Tyre 1`                    &lt;chr&gt; "Continental Grand Prix 5000 / Attack  23 ~
+#&gt; $ `Tyre 2`                    &lt;chr&gt; "Continental Grand Prix 5000, 25 mm", "Con~
+#&gt; $ `Handlebar Tape 1`          &lt;chr&gt; "Canyon Ergospeed Gel", "Canyon Ergospeed ~
+#&gt; $ `Handlebar Tape 2`          &lt;chr&gt; "Canyon bar-end plug", "Canyon bar-end plu~
+#&gt; $ `Manuals and Accessories 1` &lt;chr&gt; "Canyon tool case", "Canyon tool case", "C~
+#&gt; $ `Manuals and Accessories 2` &lt;chr&gt; "DT Swiss warranty &amp; intended use manual",~
+#&gt; $ `Manuals and Accessories 3` &lt;chr&gt; "Canyon starter box", "Canyon starter box"~
+#&gt; $ `Manuals and Accessories 4` &lt;chr&gt; "", "", "", "", "", "", "", "", "", "BAG R~
+#&gt; $ `Manuals and Accessories 5` &lt;chr&gt; "", "", "", "", "", "", "", "", "", "", ""~
+#&gt; $ `Manuals and Accessories 6` &lt;chr&gt; "", "", "", "", "", "", "", "", "", "", ""~
+#&gt; $ `Manuals and Accessories 7` &lt;chr&gt; "", "", "", "", "", "", "", "", "", "", ""~
+#&gt; $ `Manuals and Accessories 8` &lt;chr&gt; "", "", "", "", "", "", "", "", "", "", ""~</code></pre>
+</div>
+</div>
+<section id="initial-processing" class="level2" data-number="2.1"><h2 data-number="2.1" class="anchored" data-anchor-id="initial-processing">
+<span class="header-section-number">2.1</span> Initial processing</h2>
+<div class="cell" data-hash="02_ml02_sup_ML_cache/html/unnamed-chunk-4_7c97cf0a22d6252e4ab110b1df6ced13">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>bike_features_tbl1 <span class="ot">&lt;-</span> bike_features_tbl <span class="sc">%&gt;%</span> </span>
+<span id="cb5-2"><a href="#cb5-2"></a>    <span class="fu">select</span>(model<span class="sc">:</span>url, <span class="st">`</span><span class="at">Rear Derailleur</span><span class="st">`</span>, <span class="st">`</span><span class="at">Shift Lever</span><span class="st">`</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-3"><a href="#cb5-3"></a>    <span class="fu">mutate</span>(</span>
+<span id="cb5-4"><a href="#cb5-4"></a>      <span class="st">`</span><span class="at">shimano dura-ace</span><span class="st">`</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Rear Derailleur</span><span class="st">`</span> <span class="sc">%&gt;%</span> <span class="fu">str_to_lower</span>() <span class="sc">%&gt;%</span> <span class="fu">str_detect</span>(<span class="st">"shimano dura-ace "</span>) <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>(),</span>
+<span id="cb5-5"><a href="#cb5-5"></a>      <span class="st">`</span><span class="at">shimano ultegra</span><span class="st">`</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Rear Derailleur</span><span class="st">`</span> <span class="sc">%&gt;%</span> <span class="fu">str_to_lower</span>() <span class="sc">%&gt;%</span> <span class="fu">str_detect</span>(<span class="st">"shimano ultegra "</span>) <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>(),</span>
+<span id="cb5-6"><a href="#cb5-6"></a>      <span class="st">`</span><span class="at">shimano 105</span><span class="st">`</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Rear Derailleur</span><span class="st">`</span> <span class="sc">%&gt;%</span> <span class="fu">str_to_lower</span>() <span class="sc">%&gt;%</span> <span class="fu">str_detect</span>(<span class="st">"shimano 105 "</span>) <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>(),</span>
+<span id="cb5-7"><a href="#cb5-7"></a>      <span class="st">`</span><span class="at">shimano tiagra</span><span class="st">`</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Rear Derailleur</span><span class="st">`</span> <span class="sc">%&gt;%</span> <span class="fu">str_to_lower</span>() <span class="sc">%&gt;%</span> <span class="fu">str_detect</span>(<span class="st">"shimano tiagra "</span>) <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>(),</span>
+<span id="cb5-8"><a href="#cb5-8"></a>      <span class="st">`</span><span class="at">Shimano sora</span><span class="st">`</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Rear Derailleur</span><span class="st">`</span> <span class="sc">%&gt;%</span> <span class="fu">str_to_lower</span>() <span class="sc">%&gt;%</span> <span class="fu">str_detect</span>(<span class="st">"shimano sora"</span>) <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>(),</span>
+<span id="cb5-9"><a href="#cb5-9"></a>      <span class="st">`</span><span class="at">shimano deore</span><span class="st">`</span><span class="ot">=</span> <span class="st">`</span><span class="at">Rear Derailleur</span><span class="st">`</span> <span class="sc">%&gt;%</span> <span class="fu">str_to_lower</span>() <span class="sc">%&gt;%</span> <span class="fu">str_detect</span>(<span class="st">"shimano deore(?! xt)"</span>) <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>(),</span>
+<span id="cb5-10"><a href="#cb5-10"></a>      <span class="st">`</span><span class="at">shimano slx</span><span class="st">`</span><span class="ot">=</span> <span class="st">`</span><span class="at">Rear Derailleur</span><span class="st">`</span> <span class="sc">%&gt;%</span> <span class="fu">str_to_lower</span>() <span class="sc">%&gt;%</span> <span class="fu">str_detect</span>(<span class="st">"shimano slx"</span>) <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>(),</span>
+<span id="cb5-11"><a href="#cb5-11"></a>      <span class="st">`</span><span class="at">shimano grx</span><span class="st">`</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Rear Derailleur</span><span class="st">`</span> <span class="sc">%&gt;%</span> <span class="fu">str_to_lower</span>() <span class="sc">%&gt;%</span> <span class="fu">str_detect</span>(<span class="st">"shimano grx"</span>) <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>(),</span>
+<span id="cb5-12"><a href="#cb5-12"></a>      <span class="st">`</span><span class="at">Shimano xt</span><span class="st">`</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Rear Derailleur</span><span class="st">`</span> <span class="sc">%&gt;%</span> <span class="fu">str_to_lower</span>() <span class="sc">%&gt;%</span> <span class="fu">str_detect</span>(<span class="st">"shimano deore xt |shimano xt "</span>) <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>(),</span>
+<span id="cb5-13"><a href="#cb5-13"></a>      <span class="st">`</span><span class="at">Shimano xtr</span><span class="st">`</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Rear Derailleur</span><span class="st">`</span> <span class="sc">%&gt;%</span> <span class="fu">str_to_lower</span>() <span class="sc">%&gt;%</span> <span class="fu">str_detect</span>(<span class="st">"shimano xtr"</span>) <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>(),</span>
+<span id="cb5-14"><a href="#cb5-14"></a>      <span class="st">`</span><span class="at">Shimano saint</span><span class="st">`</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Rear Derailleur</span><span class="st">`</span> <span class="sc">%&gt;%</span> <span class="fu">str_to_lower</span>() <span class="sc">%&gt;%</span> <span class="fu">str_detect</span>(<span class="st">"shimano saint"</span>) <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>(),</span>
+<span id="cb5-15"><a href="#cb5-15"></a>      <span class="st">`</span><span class="at">SRAM red</span><span class="st">`</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Rear Derailleur</span><span class="st">`</span> <span class="sc">%&gt;%</span> <span class="fu">str_to_lower</span>() <span class="sc">%&gt;%</span> <span class="fu">str_detect</span>(<span class="st">"sram red"</span>) <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>(),</span>
+<span id="cb5-16"><a href="#cb5-16"></a>      <span class="st">`</span><span class="at">SRAM force</span><span class="st">`</span><span class="ot">=</span> <span class="st">`</span><span class="at">Rear Derailleur</span><span class="st">`</span> <span class="sc">%&gt;%</span> <span class="fu">str_to_lower</span>() <span class="sc">%&gt;%</span> <span class="fu">str_detect</span>(<span class="st">"sram force"</span>) <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>(),</span>
+<span id="cb5-17"><a href="#cb5-17"></a>      <span class="st">`</span><span class="at">SRAM rival</span><span class="st">`</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Rear Derailleur</span><span class="st">`</span> <span class="sc">%&gt;%</span> <span class="fu">str_to_lower</span>() <span class="sc">%&gt;%</span> <span class="fu">str_detect</span>(<span class="st">"sram rival"</span>) <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>(),</span>
+<span id="cb5-18"><a href="#cb5-18"></a>      <span class="st">`</span><span class="at">SRAM apex</span><span class="st">`</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Rear Derailleur</span><span class="st">`</span> <span class="sc">%&gt;%</span> <span class="fu">str_to_lower</span>() <span class="sc">%&gt;%</span> <span class="fu">str_detect</span>(<span class="st">"sram apex"</span>) <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>(),</span>
+<span id="cb5-19"><a href="#cb5-19"></a>      <span class="st">`</span><span class="at">SRAM xx1</span><span class="st">`</span><span class="ot">=</span> <span class="st">`</span><span class="at">Rear Derailleur</span><span class="st">`</span> <span class="sc">%&gt;%</span> <span class="fu">str_to_lower</span>() <span class="sc">%&gt;%</span> <span class="fu">str_detect</span>(<span class="st">"sram xx1"</span>) <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>(),</span>
+<span id="cb5-20"><a href="#cb5-20"></a>      <span class="st">`</span><span class="at">SRAM x01</span><span class="st">`</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Rear Derailleur</span><span class="st">`</span> <span class="sc">%&gt;%</span> <span class="fu">str_to_lower</span>() <span class="sc">%&gt;%</span> <span class="fu">str_detect</span>(<span class="st">"sram x01|sram xo1"</span>) <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>(),</span>
+<span id="cb5-21"><a href="#cb5-21"></a>      <span class="st">`</span><span class="at">SRAM gx</span><span class="st">`</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Rear Derailleur</span><span class="st">`</span> <span class="sc">%&gt;%</span> <span class="fu">str_to_lower</span>() <span class="sc">%&gt;%</span> <span class="fu">str_detect</span>(<span class="st">"sram gx"</span>) <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>(),</span>
+<span id="cb5-22"><a href="#cb5-22"></a>      <span class="st">`</span><span class="at">SRAM nx</span><span class="st">`</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Rear Derailleur</span><span class="st">`</span> <span class="sc">%&gt;%</span> <span class="fu">str_to_lower</span>() <span class="sc">%&gt;%</span> <span class="fu">str_detect</span>(<span class="st">"sram nx"</span>) <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>(),</span>
+<span id="cb5-23"><a href="#cb5-23"></a>      <span class="st">`</span><span class="at">SRAM sx</span><span class="st">`</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Rear Derailleur</span><span class="st">`</span> <span class="sc">%&gt;%</span> <span class="fu">str_to_lower</span>() <span class="sc">%&gt;%</span> <span class="fu">str_detect</span>(<span class="st">"sram sx"</span>) <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>(),</span>
+<span id="cb5-24"><a href="#cb5-24"></a>      <span class="st">`</span><span class="at">SRAM sx</span><span class="st">`</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Rear Derailleur</span><span class="st">`</span> <span class="sc">%&gt;%</span> <span class="fu">str_to_lower</span>() <span class="sc">%&gt;%</span> <span class="fu">str_detect</span>(<span class="st">"sram sx"</span>) <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>(),</span>
+<span id="cb5-25"><a href="#cb5-25"></a>      <span class="st">`</span><span class="at">Campagnolo potenza</span><span class="st">`</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Rear Derailleur</span><span class="st">`</span> <span class="sc">%&gt;%</span> <span class="fu">str_to_lower</span>() <span class="sc">%&gt;%</span> <span class="fu">str_detect</span>(<span class="st">"campagnolo potenza"</span>) <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>(),</span>
+<span id="cb5-26"><a href="#cb5-26"></a>      <span class="st">`</span><span class="at">Campagnolo super record</span><span class="st">`</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Rear Derailleur</span><span class="st">`</span> <span class="sc">%&gt;%</span> <span class="fu">str_to_lower</span>() <span class="sc">%&gt;%</span> <span class="fu">str_detect</span>(<span class="st">"campagnolo super record"</span>) <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>(),</span>
+<span id="cb5-27"><a href="#cb5-27"></a>      <span class="st">`</span><span class="at">shimano nexus</span><span class="st">`</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Shift Lever</span><span class="st">`</span>     <span class="sc">%&gt;%</span> <span class="fu">str_to_lower</span>() <span class="sc">%&gt;%</span> <span class="fu">str_detect</span>(<span class="st">"shimano nexus"</span>) <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>(),</span>
+<span id="cb5-28"><a href="#cb5-28"></a>      <span class="st">`</span><span class="at">shimano alfine</span><span class="st">`</span><span class="ot">=</span> <span class="st">`</span><span class="at">Shift Lever</span><span class="st">`</span> <span class="sc">%&gt;%</span> <span class="fu">str_to_lower</span>() <span class="sc">%&gt;%</span> <span class="fu">str_detect</span>(<span class="st">"shimano alfine"</span>) <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>()</span>
+<span id="cb5-29"><a href="#cb5-29"></a>    ) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-30"><a href="#cb5-30"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(<span class="st">`</span><span class="at">Rear Derailleur</span><span class="st">`</span>, <span class="st">`</span><span class="at">Shift Lever</span><span class="st">`</span>)) <span class="sc">%&gt;%</span> <span class="fu">mutate_if</span>(is.numeric, <span class="sc">~</span><span class="fu">replace</span>(., <span class="fu">is.na</span>(.), <span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-hash="02_ml02_sup_ML_cache/html/unnamed-chunk-5_48617a5b9bff33f6f1d112ab7e569727">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>bike_features_tbl <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">c</span>(<span class="st">"model"</span>),<span class="st">"model_year"</span>,<span class="st">"frame_material"</span>,<span class="st">"weight"</span>,<span class="st">"price"</span>,<span class="st">"category_1"</span>,<span class="st">"category_2"</span>,<span class="st">"category_3"</span>,<span class="st">"gender"</span>,<span class="st">"url"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["model"],"name":[1],"type":["chr"],"align":["left"]},{"label":["model_year"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["frame_material"],"name":[3],"type":["chr"],"align":["left"]},{"label":["weight"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["price"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["category_1"],"name":[6],"type":["chr"],"align":["left"]},{"label":["category_2"],"name":[7],"type":["chr"],"align":["left"]},{"label":["category_3"],"name":[8],"type":["chr"],"align":["left"]},{"label":["gender"],"name":[9],"type":["chr"],"align":["left"]},{"label":["url"],"name":[10],"type":["chr"],"align":["left"]}],"data":[{"1":"Aeroad CF SL Disc 8.0 Di2","2":"2020","3":"carbon","4":"7.60","5":"4579","6":"Road","7":"Race","8":"Aeroad","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/race-bikes/aeroad/aeroad-cf-sl-disc-8.0-di2/2875.html"},{"1":"Aeroad CF SLX Disc 9.0 ETAP","2":"2020","3":"carbon","4":"7.27","5":"6919","6":"Road","7":"Race","8":"Aeroad","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/race-bikes/aeroad/aeroad-cf-slx-disc-9.0-etap/2873.html"},{"1":"Aeroad CF SLX Disc 9.0 Di2","2":"2020","3":"carbon","4":"7.10","5":"6429","6":"Road","7":"Race","8":"Aeroad","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/race-bikes/aeroad/aeroad-cf-slx-disc-9.0-di2/2874.html"},{"1":"Aeroad CF SL Disc 8.0 ETAP","2":"2020","3":"carbon","4":"7.73","5":"5069","6":"Road","7":"Race","8":"Aeroad","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/race-bikes/aeroad/aeroad-cf-sl-disc-8.0-etap/2876.html"},{"1":"Aeroad CF SL Disc 8.0","2":"2020","3":"carbon","4":"7.83","5":"3609","6":"Road","7":"Race","8":"Aeroad","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/race-bikes/aeroad/aeroad-cf-sl-disc-8.0/2877.html"},{"1":"Aeroad CF SLX 9.0 SL","2":"2019","3":"carbon","4":"6.80","5":"6139","6":"Road","7":"Race","8":"Aeroad","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/race-bikes/aeroad/aeroad-cf-slx-9.0-sl/2225.html"},{"1":"Aeroad CF SLX 9.0 Di2","2":"2019","3":"carbon","4":"6.80","5":"5359","6":"Road","7":"Race","8":"Aeroad","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/race-bikes/aeroad/aeroad-cf-slx-9.0-di2/2091.html"},{"1":"Aeroad CF SL 7.0","2":"2021","3":"carbon","4":"7.60","5":"2629","6":"Road","7":"Race","8":"Aeroad","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/race-bikes/aeroad/aeroad-cf-sl-7.0/2086.html"},{"1":"Aeroad CF SL 8.0 Di2","2":"2020","3":"carbon","4":"7.30","5":"3699","6":"Road","7":"Race","8":"Aeroad","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/race-bikes/aeroad/aeroad-cf-sl-8.0-di2/2088.html"},{"1":"Aeroad WMN CF SL 8.0","2":"2020","3":"carbon","4":"7.20","5":"3219","6":"Road","7":"Race","8":"Aeroad","9":"female","10":"https://www.canyon.com/en-de/road-bikes/race-bikes/aeroad/aeroad-wmn-cf-sl-8.0/2120.html"},{"1":"Aeroad CF SL 8.0","2":"2020","3":"carbon","4":"7.30","5":"2829","6":"Road","7":"Race","8":"Aeroad","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/race-bikes/aeroad/aeroad-cf-sl-8.0/2087.html"},{"1":"Endurace AL Disc 7.0","2":"2020","3":"aluminium","4":"8.72","5":"1559","6":"Road","7":"Endurance","8":"Endurace","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/endurance-bikes/endurace/endurace-al-disc-7.0/2394.html"},{"1":"Endurace WMN AL Disc 7.0","2":"2020","3":"aluminium","4":"8.73","5":"1559","6":"Road","7":"Endurance","8":"Endurace","9":"female","10":"https://www.canyon.com/en-de/road-bikes/endurance-bikes/endurace/endurace-wmn-al-disc-7.0/2386.html"},{"1":"Endurace AL Disc 6.0","2":"2020","3":"aluminium","4":"9.04","5":"1269","6":"Road","7":"Endurance","8":"Endurace","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/endurance-bikes/endurace/endurace-al-disc-6.0/2393.html"},{"1":"Endurace WMN AL Disc 6.0","2":"2020","3":"aluminium","4":"8.97","5":"1269","6":"Road","7":"Endurance","8":"Endurace","9":"female","10":"https://www.canyon.com/en-de/road-bikes/endurance-bikes/endurace/endurace-wmn-al-disc-6.0/2385.html"},{"1":"Endurace AL 7.0","2":"2020","3":"aluminium","4":"8.21","5":"1169","6":"Road","7":"Endurance","8":"Endurace","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/endurance-bikes/endurace/endurace-al-7.0/2392.html"},{"1":"Endurace WMN AL 7.0","2":"2020","3":"aluminium","4":"8.20","5":"1169","6":"Road","7":"Endurance","8":"Endurace","9":"female","10":"https://www.canyon.com/en-de/road-bikes/endurance-bikes/endurace/endurace-wmn-al-7.0/2384.html"},{"1":"Endurace AL 6.0","2":"2020","3":"aluminium","4":"8.58","5":"969","6":"Road","7":"Endurance","8":"Endurace","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/endurance-bikes/endurace/endurace-al-6.0/2391.html"},{"1":"Endurace WMN AL 6.0","2":"2020","3":"aluminium","4":"8.50","5":"969","6":"Road","7":"Endurance","8":"Endurace","9":"female","10":"https://www.canyon.com/en-de/road-bikes/endurance-bikes/endurace/endurace-wmn-al-6.0/2383.html"},{"1":"Endurace CF SLX Disc 9.0 ETAP","2":"2020","3":"carbon","4":"7.17","5":"7309","6":"Road","7":"Endurance","8":"Endurace","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/endurance-bikes/endurace/endurace-cf-slx-disc-9.0-etap/2399.html"},{"1":"Endurace CF SLX Disc 9.0 Di2","2":"2020","3":"carbon","4":"7.16","5":"6819","6":"Road","7":"Endurance","8":"Endurace","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/endurance-bikes/endurace/endurace-cf-slx-disc-9.0-di2/2400.html"},{"1":"Endurace CF SLX Disc 8.0 ETAP","2":"2020","3":"carbon","4":"7.70","5":"5359","6":"Road","7":"Endurance","8":"Endurace","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/endurance-bikes/endurace/endurace-cf-slx-disc-8.0-etap/2398.html"},{"1":"Endurace CF SL Disc 8.0 Aero Di2","2":"2020","3":"carbon","4":"7.64","5":"4189","6":"Road","7":"Endurance","8":"Endurace","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/endurance-bikes/endurace/endurace-cf-sl-disc-8.0-aero-di2/2397.html"},{"1":"Endurace CF SL Disc 8.0 Pro","2":"2020","3":"carbon","4":"7.58","5":"2729","6":"Road","7":"Endurance","8":"Endurace","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/endurance-bikes/endurace/endurace-cf-sl-disc-8.0-pro/2509.html"},{"1":"Endurace CF SL Disc 8.0","2":"2020","3":"carbon","4":"8.10","5":"2629","6":"Road","7":"Endurance","8":"Endurace","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/endurance-bikes/endurace/endurace-cf-sl-disc-8.0/2185.html"},{"1":"Endurace WMN CF SL Disc 8.0","2":"2020","3":"carbon","4":"7.88","5":"2629","6":"Road","7":"Endurance","8":"Endurace","9":"female","10":"https://www.canyon.com/en-de/road-bikes/endurance-bikes/endurace/endurace-wmn-cf-sl-disc-8.0/2388.html"},{"1":"Endurace WMN CF SL Disc 7.0","2":"2020","3":"carbon","4":"8.28","5":"2049","6":"Road","7":"Endurance","8":"Endurace","9":"female","10":"https://www.canyon.com/en-de/road-bikes/endurance-bikes/endurace/endurace-wmn-cf-sl-disc-7.0/2507.html"},{"1":"Endurace CF SL Disc 7.0","2":"2020","3":"carbon","4":"8.39","5":"2049","6":"Road","7":"Endurance","8":"Endurace","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/endurance-bikes/endurace/endurace-cf-sl-disc-7.0/2396.html"},{"1":"Endurace CF 7.0","2":"2020","3":"carbon","4":"7.96","5":"1459","6":"Road","7":"Endurance","8":"Endurace","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/endurance-bikes/endurace/endurace-cf-7.0/2508.html"},{"1":"Endurace CF SL Disc 8.0 Di2","2":"2020","3":"carbon","4":"8.00","5":"3219","6":"Road","7":"Endurance","8":"Endurace","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/endurance-bikes/endurace/endurace-cf-sl-disc-8.0-di2/2186.html"},{"1":"Endurace WMN CF SL Disc 8.0 Di2","2":"2020","3":"carbon","4":"7.90","5":"3219","6":"Road","7":"Endurance","8":"Endurace","9":"female","10":"https://www.canyon.com/en-de/road-bikes/endurance-bikes/endurace/endurace-wmn-cf-sl-disc-8.0-di2/2135.html"},{"1":"Endurace CF 8.0","2":"2020","3":"carbon","4":"7.46","5":"1949","6":"Road","7":"Endurance","8":"Endurace","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/endurance-bikes/endurace/endurace-cf-8.0/2182.html"},{"1":"Endurace:ON 7.0","2":"2020","3":"aluminium","4":"15.18","5":"2919","6":"E-Bikes","7":"E-Road","8":"Endurace:ON","9":"unisex","10":"https://www.canyon.com/en-de/e-bikes/e-road-bikes/endurace-on/endurace-on-7.0/2486.html"},{"1":"Inflite CF SLX 9 Team","2":"2021","3":"carbon","4":"7.80","5":"4389","6":"Road","7":"Cyclocross","8":"Inflite","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/cyclocross-bikes/inflite/inflite-cf-slx-9-team/2658.html"},{"1":"Inflite CF SLX 9","2":"2021","3":"carbon","4":"7.81","5":"4089","6":"Road","7":"Cyclocross","8":"Inflite","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/cyclocross-bikes/inflite/inflite-cf-slx-9/2657.html"},{"1":"Inflite CF SL 8","2":"2021","3":"carbon","4":"7.90","5":"3309","6":"Road","7":"Cyclocross","8":"Inflite","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/cyclocross-bikes/inflite/inflite-cf-sl-8/2779.html"},{"1":"Inflite CF SL 7","2":"2021","3":"carbon","4":"8.26","5":"2729","6":"Road","7":"Cyclocross","8":"Inflite","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/cyclocross-bikes/inflite/inflite-cf-sl-7/2656.html"},{"1":"Inflite CF SL 6","2":"2021","3":"carbon","4":"8.40","5":"2139","6":"Road","7":"Cyclocross","8":"Inflite","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/cyclocross-bikes/inflite/inflite-cf-sl-6/2778.html"},{"1":"Inflite 5","2":"2021","3":"aluminium","4":"8.85","5":"1559","6":"Road","7":"Cyclocross","8":"Inflite","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/cyclocross-bikes/inflite/inflite-5/2655.html"},{"1":"Inflite CF SLX 9","2":"2020","3":"carbon","4":"7.40","5":"3599","6":"Road","7":"Cyclocross","8":"Inflite","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/cyclocross-bikes/inflite/inflite-cf-slx-9/2444.html"},{"1":"Inflite CF SL 8","2":"2020","3":"carbon","4":"7.90","5":"2919","6":"Road","7":"Cyclocross","8":"Inflite","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/cyclocross-bikes/inflite/inflite-cf-sl-8/2443.html"},{"1":"Speedmax CF SLX 9.0 LTD","2":"2020","3":"carbon","4":"8.50","5":"7799","6":"Road","7":"Triathlon Bike","8":"Speedmax","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/triathlon-bikes/speedmax/speedmax-cf-slx-9.0-ltd/2145.html"},{"1":"Speedmax CF 8.0","2":"2020","3":"carbon","4":"8.40","5":"2529","6":"Road","7":"Triathlon Bike","8":"Speedmax","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/triathlon-bikes/speedmax/speedmax-cf-8.0/2420.html"},{"1":"Speedmax CF 7.0","2":"2020","3":"carbon","4":"8.50","5":"2339","6":"Road","7":"Triathlon Bike","8":"Speedmax","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/triathlon-bikes/speedmax/speedmax-cf-7.0/2419.html"},{"1":"Speedmax CF 8.0 SL","2":"2020","3":"carbon","4":"8.40","5":"2829","6":"Road","7":"Triathlon Bike","8":"Speedmax","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/triathlon-bikes/speedmax/speedmax-cf-8.0-sl/2139.html"},{"1":"Speedmax WMN CF 8.0 Di2","2":"2020","3":"carbon","4":"8.10","5":"3599","6":"Road","7":"Triathlon Bike","8":"Speedmax","9":"female","10":"https://www.canyon.com/en-de/road-bikes/triathlon-bikes/speedmax/speedmax-wmn-cf-8.0-di2/2111.html"},{"1":"Speedmax CF SLX 9.0 SL","2":"2020","3":"carbon","4":"8.50","5":"6339","6":"Road","7":"Triathlon Bike","8":"Speedmax","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/triathlon-bikes/speedmax/speedmax-cf-slx-9.0-sl/2144.html"},{"1":"Speedmax WMN CF 8.0 LTD","2":"2020","3":"carbon","4":"8.40","5":"4189","6":"Road","7":"Triathlon Bike","8":"Speedmax","9":"female","10":"https://www.canyon.com/en-de/road-bikes/triathlon-bikes/speedmax/speedmax-wmn-cf-8.0-ltd/2112.html"},{"1":"Speedmax CF SLX 9.0 TT","2":"2020","3":"carbon","4":"8.20","5":"8769","6":"Road","7":"Triathlon Bike","8":"Speedmax","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/triathlon-bikes/speedmax/speedmax-cf-slx-9.0-tt/2146.html"},{"1":"Speedmax CF 8.0 Di2","2":"2020","3":"carbon","4":"8.50","5":"3599","6":"Road","7":"Triathlon Bike","8":"Speedmax","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/triathlon-bikes/speedmax/speedmax-cf-8.0-di2/2140.html"},{"1":"Speedmax CF SLX 8.0","2":"2020","3":"carbon","4":"8.70","5":"4479","6":"Road","7":"Triathlon Bike","8":"Speedmax","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/triathlon-bikes/speedmax/speedmax-cf-slx-8.0/2423.html"},{"1":"Speedmax WMN CF SLX 8.0 SL","2":"2020","3":"carbon","4":"8.60","5":"4879","6":"Road","7":"Triathlon Bike","8":"Speedmax","9":"female","10":"https://www.canyon.com/en-de/road-bikes/triathlon-bikes/speedmax/speedmax-wmn-cf-slx-8.0-sl/2113.html"},{"1":"Speedmax WMN CF 8.0","2":"2020","3":"carbon","4":"8.20","5":"2529","6":"Road","7":"Triathlon Bike","8":"Speedmax","9":"female","10":"https://www.canyon.com/en-de/road-bikes/triathlon-bikes/speedmax/speedmax-wmn-cf-8.0/2422.html"},{"1":"Speedmax CF 8.0 LTD","2":"2020","3":"carbon","4":"8.50","5":"4089","6":"Road","7":"Triathlon Bike","8":"Speedmax","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/triathlon-bikes/speedmax/speedmax-cf-8.0-ltd/2141.html"},{"1":"Speedmax WMN CF 7.0","2":"2020","3":"carbon","4":"8.30","5":"2139","6":"Road","7":"Triathlon Bike","8":"Speedmax","9":"female","10":"https://www.canyon.com/en-de/road-bikes/triathlon-bikes/speedmax/speedmax-wmn-cf-7.0/2421.html"},{"1":"Speedmax CF SLX 8.0 SL","2":"2020","3":"carbon","4":"8.70","5":"5359","6":"Road","7":"Triathlon Bike","8":"Speedmax","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/triathlon-bikes/speedmax/speedmax-cf-slx-8.0-sl/2143.html"},{"1":"Speedmax CF 7.0","2":"2019","3":"carbon","4":"8.80","5":"1749","6":"Road","7":"Triathlon Bike","8":"Speedmax","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/triathlon-bikes/speedmax/speedmax-cf-7.0/2137.html"},{"1":"Ultimate CFR Disc EPS","2":"2021","3":"carbon","4":"6.29","5":"8769","6":"Road","7":"Race","8":"Ultimate","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/race-bikes/ultimate/ultimate-cfr-disc-eps/2763.html"},{"1":"Ultimate CFR Disc Di2","2":"2021","3":"carbon","4":"6.59","5":"7409","6":"Road","7":"Race","8":"Ultimate","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/race-bikes/ultimate/ultimate-cfr-disc-di2/2762.html"},{"1":"Ultimate CF SL 8.0","2":"2020","3":"carbon","4":"7.00","5":"2239","6":"Road","7":"Race","8":"Ultimate","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/race-bikes/ultimate/ultimate-cf-sl-8.0/2151.html"},{"1":"Ultimate CF SLX Disc 9.0 ETAP","2":"2020","3":"carbon","4":"6.89","5":"7019","6":"Road","7":"Race","8":"Ultimate","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/race-bikes/ultimate/ultimate-cf-slx-disc-9.0-etap/2413.html"},{"1":"Ultimate CF SLX Disc 9.0 Di2","2":"2020","3":"carbon","4":"7.10","5":"6819","6":"Road","7":"Race","8":"Ultimate","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/race-bikes/ultimate/ultimate-cf-slx-disc-9.0-di2/2412.html"},{"1":"Ultimate CF SLX 9.0 Di2","2":"2020","3":"carbon","4":"6.50","5":"6629","6":"Road","7":"Race","8":"Ultimate","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/race-bikes/ultimate/ultimate-cf-slx-9.0-di2/2408.html"},{"1":"Ultimate CF SLX 9.0 ETAP","2":"2020","3":"carbon","4":"6.50","5":"6039","6":"Road","7":"Race","8":"Ultimate","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/race-bikes/ultimate/ultimate-cf-slx-9.0-etap/2407.html"},{"1":"Ultimate WMN CF SLX Disc 9.0 ETAP","2":"2020","3":"carbon","4":"7.07","5":"5849","6":"Road","7":"Race","8":"Ultimate","9":"female","10":"https://www.canyon.com/en-de/road-bikes/race-bikes/ultimate/ultimate-wmn-cf-slx-disc-9.0-etap/2405.html"},{"1":"Ultimate CF SLX Disc 8.0 ETAP","2":"2020","3":"carbon","4":"7.44","5":"5359","6":"Road","7":"Race","8":"Ultimate","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/race-bikes/ultimate/ultimate-cf-slx-disc-8.0-etap/2411.html"},{"1":"Ultimate CF SL Disc 8.0 Di2 Aero","2":"2020","3":"carbon","4":"7.35","5":"4089","6":"Road","7":"Race","8":"Ultimate","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/race-bikes/ultimate/ultimate-cf-sl-disc-8.0-di2-aero/2410.html"},{"1":"Ultimate CF SLX 8.0 Di2","2":"2020","3":"carbon","4":"6.80","5":"4089","6":"Road","7":"Race","8":"Ultimate","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/race-bikes/ultimate/ultimate-cf-slx-8.0-di2/2406.html"},{"1":"Ultimate WMN CF SL Disc 8.0 ETAP","2":"2020","3":"carbon","4":"7.58","5":"3899","6":"Road","7":"Race","8":"Ultimate","9":"female","10":"https://www.canyon.com/en-de/road-bikes/race-bikes/ultimate/ultimate-wmn-cf-sl-disc-8.0-etap/2404.html"},{"1":"Ultimate WMN CF SL Disc 8.0 Di2","2":"2020","3":"carbon","4":"7.40","5":"3219","6":"Road","7":"Race","8":"Ultimate","9":"female","10":"https://www.canyon.com/en-de/road-bikes/race-bikes/ultimate/ultimate-wmn-cf-sl-disc-8.0-di2/2403.html"},{"1":"Ultimate WMN CF SL Disc 8.0","2":"2020","3":"carbon","4":"7.40","5":"2529","6":"Road","7":"Race","8":"Ultimate","9":"female","10":"https://www.canyon.com/en-de/road-bikes/race-bikes/ultimate/ultimate-wmn-cf-sl-disc-8.0/2402.html"},{"1":"Ultimate WMN CF SL Disc 7.0","2":"2020","3":"carbon","4":"7.96","5":"2049","6":"Road","7":"Race","8":"Ultimate","9":"female","10":"https://www.canyon.com/en-de/road-bikes/race-bikes/ultimate/ultimate-wmn-cf-sl-disc-7.0/2401.html"},{"1":"Ultimate CF SL 7.0","2":"2020","3":"carbon","4":"7.54","5":"1659","6":"Road","7":"Race","8":"Ultimate","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/race-bikes/ultimate/ultimate-cf-sl-7.0/2510.html"},{"1":"Ultimate CF SLX Disc 9.0 Team Movistar","2":"2020","3":"carbon","4":"7.00","5":"6629","6":"Road","7":"Race","8":"Ultimate","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/race-bikes/ultimate/ultimate-cf-slx-disc-9.0-team-movistar/2207.html"},{"1":"Ultimate CF SL Disc 8.0 Di2","2":"2020","3":"carbon","4":"7.50","5":"3219","6":"Road","7":"Race","8":"Ultimate","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/race-bikes/ultimate/ultimate-cf-sl-disc-8.0-di2/2159.html"},{"1":"Ultimate CF SL 8.0 Di2","2":"2020","3":"carbon","4":"7.00","5":"2919","6":"Road","7":"Race","8":"Ultimate","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/race-bikes/ultimate/ultimate-cf-sl-8.0-di2/2152.html"},{"1":"Ultimate CF SL Disc 8.0","2":"2020","3":"carbon","4":"7.60","5":"2529","6":"Road","7":"Race","8":"Ultimate","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/race-bikes/ultimate/ultimate-cf-sl-disc-8.0/2157.html"},{"1":"Ultimate CF SLX 9.0 Di2","2":"2019","3":"carbon","4":"6.60","5":"5359","6":"Road","7":"Race","8":"Ultimate","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/race-bikes/ultimate/ultimate-cf-slx-9.0-di2/2165.html"},{"1":"Ultimate CF SL Disc 7.0","2":"2019","3":"carbon","4":"7.90","5":"2049","6":"Road","7":"Race","8":"Ultimate","9":"unisex","10":"https://www.canyon.com/en-de/road-bikes/race-bikes/ultimate/ultimate-cf-sl-disc-7.0/2156.html"},{"1":"Dude CF 8.0 Trail","2":"2020","3":"carbon","4":"14.20","5":"2139","6":"Mountain","7":"Fat Bikes","8":"Dude","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/fat-bikes/dude/dude-cf-8.0-trail/2464.html"},{"1":"Dude CF 9.0 Trail","2":"2020","3":"carbon","4":"13.80","5":"2629","6":"Mountain","7":"Fat Bikes","8":"Dude","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/fat-bikes/dude/dude-cf-9.0-trail/2465.html"},{"1":"Exceed CFR LTD","2":"2021","3":"carbon","4":"8.90","5":"6339","6":"Mountain","7":"Cross-Country","8":"Exceed","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/cross-country-bikes/exceed/exceed-cfr-ltd/2644.html"},{"1":"Exceed CFR Team","2":"2021","3":"carbon","4":"8.87","5":"5559","6":"Mountain","7":"Cross-Country","8":"Exceed","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/cross-country-bikes/exceed/exceed-cfr-team/2643.html"},{"1":"Exceed CF SLX 9","2":"2021","3":"carbon","4":"9.73","5":"4579","6":"Mountain","7":"Cross-Country","8":"Exceed","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/cross-country-bikes/exceed/exceed-cf-slx-9/2642.html"},{"1":"Exceed CF SLX 8","2":"2021","3":"carbon","4":"9.90","5":"3609","6":"Mountain","7":"Cross-Country","8":"Exceed","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/cross-country-bikes/exceed/exceed-cf-slx-8/2641.html"},{"1":"Exceed CF 7 WMN","2":"2021","3":"carbon","4":"10.30","5":"2629","6":"Mountain","7":"Cross-Country","8":"Exceed","9":"female","10":"https://www.canyon.com/en-de/mountain-bikes/cross-country-bikes/exceed/exceed-cf-7-wmn/2640.html"},{"1":"Exceed CF 7","2":"2021","3":"carbon","4":"10.55","5":"2629","6":"Mountain","7":"Cross-Country","8":"Exceed","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/cross-country-bikes/exceed/exceed-cf-7/2639.html"},{"1":"Exceed CF 6","2":"2021","3":"carbon","4":"10.86","5":"2139","6":"Mountain","7":"Cross-Country","8":"Exceed","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/cross-country-bikes/exceed/exceed-cf-6/2638.html"},{"1":"Exceed CF 5 WMN","2":"2021","3":"carbon","4":"12.08","5":"1659","6":"Mountain","7":"Cross-Country","8":"Exceed","9":"female","10":"https://www.canyon.com/en-de/mountain-bikes/cross-country-bikes/exceed/exceed-cf-5-wmn/2637.html"},{"1":"Exceed CF 5","2":"2021","3":"carbon","4":"12.25","5":"1659","6":"Mountain","7":"Cross-Country","8":"Exceed","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/cross-country-bikes/exceed/exceed-cf-5/2636.html"},{"1":"Exceed CF SLX 9.0 Race LTD","2":"2020","3":"carbon","4":"8.97","5":"4389","6":"Mountain","7":"Cross-Country","8":"Exceed","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/cross-country-bikes/exceed/exceed-cf-slx-9.0-race-ltd/2432.html"},{"1":"Exceed CF SLX 9.0 Race","2":"2020","3":"carbon","4":"9.00","5":"4189","6":"Mountain","7":"Cross-Country","8":"Exceed","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/cross-country-bikes/exceed/exceed-cf-slx-9.0-race/2431.html"},{"1":"Exceed CF SLX 9.0","2":"2020","3":"carbon","4":"9.30","5":"3599","6":"Gravel","7":"Adventure","8":"Exceed","9":"unisex","10":"https://www.canyon.com/en-de/global-campaigns/end-of-season-sale/exceed-cf-slx-9.0/2430.html"},{"1":"Grail CF SLX 8 eTap","2":"2021","3":"carbon","4":"8.47","5":"4779","6":"Gravel","7":"All-Road","8":"Grail","9":"unisex","10":"https://www.canyon.com/en-de/gravel-bikes/all-road/grail/grail-cf-slx-8-etap/2720.html"},{"1":"Grail CF SLX 8 Di2","2":"2021","3":"carbon","4":"8.44","5":"4479","6":"Gravel","7":"All-Road","8":"Grail","9":"unisex","10":"https://www.canyon.com/en-de/gravel-bikes/all-road/grail/grail-cf-slx-8-di2/2721.html"},{"1":"Grail CF SL 8 eTap","2":"2021","3":"carbon","4":"8.66","5":"3899","6":"Gravel","7":"All-Road","8":"Grail","9":"unisex","10":"https://www.canyon.com/en-de/gravel-bikes/all-road/grail/grail-cf-sl-8-etap/2719.html"},{"1":"Grail CF SL 8 Di2","2":"2021","3":"carbon","4":"8.88","5":"3409","6":"Gravel","7":"All-Road","8":"Grail","9":"unisex","10":"https://www.canyon.com/en-de/gravel-bikes/all-road/grail/grail-cf-sl-8-di2/2718.html"},{"1":"Grail CF SL 8 WMN Di2","2":"2021","3":"carbon","4":"8.82","5":"3409","6":"Gravel","7":"All-Road","8":"Grail","9":"female","10":"https://www.canyon.com/en-de/gravel-bikes/all-road/grail/grail-cf-sl-8-wmn-di2/2706.html"},{"1":"Grail CF SL 8","2":"2021","3":"carbon","4":"8.91","5":"2729","6":"Gravel","7":"All-Road","8":"Grail","9":"unisex","10":"https://www.canyon.com/en-de/gravel-bikes/all-road/grail/grail-cf-sl-8/2717.html"},{"1":"Grail 7 1by","2":"2021","3":"aluminium","4":"9.54","5":"1749","6":"Gravel","7":"All-Road","8":"Grail","9":"unisex","10":"https://www.canyon.com/en-de/gravel-bikes/all-road/grail/grail-7-1by/2707.html"},{"1":"Grail:ON CF 8 eTap","2":"2021","3":"carbon","4":"15.90","5":"5849","6":"E-Bikes","7":"E-Gravel","8":"Grail:ON","9":"unisex","10":"https://www.canyon.com/en-de/e-bikes/e-gravel-bikes/grail-on/grail-on-cf-8-etap/2553.html"},{"1":"Grail:ON CF 8","2":"2021","3":"carbon","4":"16.70","5":"5169","6":"E-Bikes","7":"E-Gravel","8":"Grail:ON","9":"unisex","10":"https://www.canyon.com/en-de/e-bikes/e-gravel-bikes/grail-on/grail-on-cf-8/2552.html"},{"1":"Grail:ON CF 7","2":"2021","3":"carbon","4":"17.10","5":"4869","6":"E-Bikes","7":"E-Gravel","8":"Grail:ON","9":"unisex","10":"https://www.canyon.com/en-de/e-bikes/e-gravel-bikes/grail-on/grail-on-cf-7/2551.html"},{"1":"Grail:ON CF 7 WMN","2":"2021","3":"carbon","4":"17.10","5":"4869","6":"E-Bikes","7":"E-Gravel","8":"Grail:ON","9":"female","10":"https://www.canyon.com/en-de/e-bikes/e-gravel-bikes/grail-on/grail-on-cf-7-wmn/2722.html"},{"1":"Grail 7","2":"2021","3":"aluminium","4":"9.39","5":"1749","6":"Gravel","7":"All-Road","8":"Grail","9":"unisex","10":"https://www.canyon.com/en-de/gravel-bikes/all-road/grail/grail-7/2370.html"},{"1":"Grail 7 WMN","2":"2021","3":"aluminium","4":"9.37","5":"1749","6":"Gravel","7":"All-Road","8":"Grail","9":"female","10":"https://www.canyon.com/en-de/gravel-bikes/all-road/grail/grail-7-wmn/2373.html"},{"1":"Grail 6","2":"2021","3":"aluminium","4":"9.50","5":"1459","6":"Gravel","7":"All-Road","8":"Grail","9":"unisex","10":"https://www.canyon.com/en-de/gravel-bikes/all-road/grail/grail-6/2369.html"},{"1":"Grail 6 WMN","2":"2021","3":"aluminium","4":"9.42","5":"1459","6":"Gravel","7":"All-Road","8":"Grail","9":"female","10":"https://www.canyon.com/en-de/gravel-bikes/all-road/grail/grail-6-wmn/2372.html"},{"1":"Grail CF SL 7","2":"2021","3":"carbon","4":"8.88","5":"2339","6":"Gravel","7":"All-Road","8":"Grail","9":"unisex","10":"https://www.canyon.com/en-de/gravel-bikes/all-road/grail/grail-cf-sl-7/2374.html"},{"1":"Grail CF SL 7 WMN","2":"2021","3":"carbon","4":"8.86","5":"2339","6":"Gravel","7":"All-Road","8":"Grail","9":"female","10":"https://www.canyon.com/en-de/gravel-bikes/all-road/grail/grail-cf-sl-7-wmn/2378.html"},{"1":"Grail CF SL 8.0 ETAP","2":"2020","3":"carbon","4":"8.60","5":"3119","6":"Gravel","7":"All-Road","8":"Grail","9":"unisex","10":"https://www.canyon.com/en-de/gravel-bikes/all-road/grail/grail-cf-sl-8.0-etap/2377.html"},{"1":"Grail CF SLX 8.0 Di2","2":"2020","3":"carbon","4":"8.30","5":"4089","6":"Gravel","7":"Adventure","8":"Grail","9":"unisex","10":"https://www.canyon.com/en-de/global-campaigns/end-of-season-sale/grail-cf-slx-8.0-di2/2382.html"},{"1":"Grand Canyon Young Hero","2":"2021","3":"aluminium","4":"13.57","5":"579","6":"Mountain","7":"Trail","8":"Grand Canyon","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/trail-bikes/grand-canyon/grand-canyon-young-hero/2653.html"},{"1":"Grand Canyon 5","2":"2021","3":"aluminium","4":"14.13","5":"779","6":"Mountain","7":"Trail","8":"Grand Canyon","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/trail-bikes/grand-canyon/grand-canyon-5/2613.html"},{"1":"Grand Canyon 5 WMN","2":"2021","3":"aluminium","4":"13.66","5":"779","6":"Mountain","7":"Trail","8":"Grand Canyon","9":"female","10":"https://www.canyon.com/en-de/mountain-bikes/trail-bikes/grand-canyon/grand-canyon-5-wmn/2614.html"},{"1":"Grand Canyon 6","2":"2021","3":"aluminium","4":"13.95","5":"969","6":"Mountain","7":"Trail","8":"Grand Canyon","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/trail-bikes/grand-canyon/grand-canyon-6/2615.html"},{"1":"Grand Canyon 6 WMN","2":"2021","3":"aluminium","4":"13.56","5":"969","6":"Mountain","7":"Trail","8":"Grand Canyon","9":"female","10":"https://www.canyon.com/en-de/mountain-bikes/trail-bikes/grand-canyon/grand-canyon-6-wmn/2616.html"},{"1":"Grand Canyon 7","2":"2021","3":"aluminium","4":"13.99","5":"1169","6":"Mountain","7":"Trail","8":"Grand Canyon","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/trail-bikes/grand-canyon/grand-canyon-7/2617.html"},{"1":"Grand Canyon 7 WMN","2":"2021","3":"aluminium","4":"13.66","5":"1169","6":"Mountain","7":"Trail","8":"Grand Canyon","9":"female","10":"https://www.canyon.com/en-de/mountain-bikes/trail-bikes/grand-canyon/grand-canyon-7-wmn/2618.html"},{"1":"Grand Canyon 8","2":"2021","3":"aluminium","4":"13.58","5":"1359","6":"Mountain","7":"Trail","8":"Grand Canyon","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/trail-bikes/grand-canyon/grand-canyon-8/2619.html"},{"1":"Grand Canyon 8 WMN","2":"2021","3":"aluminium","4":"13.29","5":"1359","6":"Mountain","7":"Trail","8":"Grand Canyon","9":"female","10":"https://www.canyon.com/en-de/mountain-bikes/trail-bikes/grand-canyon/grand-canyon-8-wmn/2620.html"},{"1":"Grand Canyon 9","2":"2021","3":"aluminium","4":"13.38","5":"1749","6":"Mountain","7":"Trail","8":"Grand Canyon","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/trail-bikes/grand-canyon/grand-canyon-9/2621.html"},{"1":"Grand Canyon:ON AL 9.0","2":"2020","3":"aluminium","4":"21.89","5":"3309","6":"E-Bikes","7":"E-Mountain","8":"Grand Canyon:ON","9":"unisex","10":"https://www.canyon.com/en-de/e-bikes/e-mountain-bikes/grandcanyon-on/grand-canyon-on-al-9.0/2254.html"},{"1":"Grand Canyon:ON WMN AL 8.0","2":"2020","3":"aluminium","4":"21.25","5":"2919","6":"E-Bikes","7":"E-Mountain","8":"Grand Canyon:ON","9":"female","10":"https://www.canyon.com/en-de/e-bikes/e-mountain-bikes/grandcanyon-on/grand-canyon-on-wmn-al-8.0/2252.html"},{"1":"Grand Canyon:ON AL 8.0","2":"2020","3":"aluminium","4":"21.45","5":"2529","6":"E-Bikes","7":"E-Mountain","8":"Grand Canyon:ON","9":"unisex","10":"https://www.canyon.com/en-de/e-bikes/e-mountain-bikes/grandcanyon-on/grand-canyon-on-al-8.0/2253.html"},{"1":"Lux CF SLX 9.0","2":"2020","3":"carbon","4":"10.80","5":"4279","6":"Mountain","7":"Cross-Country","8":"Lux","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/cross-country-bikes/lux/lux-cf-slx-9.0/2437.html"},{"1":"Lux CF 7","2":"2021","3":"carbon","4":"11.94","5":"3409","6":"Mountain","7":"Cross-Country","8":"Lux","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/cross-country-bikes/lux/lux-cf-7/2646.html"},{"1":"Lux CF 6","2":"2021","3":"carbon","4":"12.11","5":"2919","6":"Mountain","7":"Cross-Country","8":"Lux","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/cross-country-bikes/lux/lux-cf-6/2645.html"},{"1":"Lux CF 8","2":"2021","3":"carbon","4":"11.64","5":"3899","6":"Mountain","7":"Cross-Country","8":"Lux","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/cross-country-bikes/lux/lux-cf-8/2648.html"},{"1":"Lux CF SLX 9","2":"2021","3":"carbon","4":"10.71","5":"4869","6":"Mountain","7":"Cross-Country","8":"Lux","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/cross-country-bikes/lux/lux-cf-slx-9/2649.html"},{"1":"Lux CF SLX 9 Team","2":"2021","3":"carbon","4":"10.22","5":"5849","6":"Mountain","7":"Cross-Country","8":"Lux","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/cross-country-bikes/lux/lux-cf-slx-9-team/2650.html"},{"1":"Lux CF SLX 9 LTD","2":"2021","3":"carbon","4":"10.13","5":"6819","6":"Mountain","7":"Cross-Country","8":"Lux","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/cross-country-bikes/lux/lux-cf-slx-9-ltd/2651.html"},{"1":"Lux CF 7 WMN","2":"2021","3":"carbon","4":"11.78","5":"3409","6":"Mountain","7":"Cross-Country","8":"Lux","9":"female","10":"https://www.canyon.com/en-de/mountain-bikes/cross-country-bikes/lux/lux-cf-7-wmn/2647.html"},{"1":"Lux CF SLX 9.0 Race Limited","2":"2020","3":"carbon","4":"10.20","5":"6039","6":"Mountain","7":"Cross-Country","8":"Lux","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/cross-country-bikes/lux/lux-cf-slx-9.0-race-limited/2439.html"},{"1":"Lux CF SLX 9.0 Team","2":"2020","3":"carbon","4":"10.10","5":"5559","6":"Mountain","7":"Cross-Country","8":"Lux","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/cross-country-bikes/lux/lux-cf-slx-9.0-team/2438.html"},{"1":"Lux CF SL 8.0","2":"2020","3":"carbon","4":"11.40","5":"3599","6":"Mountain","7":"Cross-Country","8":"Lux","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/cross-country-bikes/lux/lux-cf-sl-8.0/2436.html"},{"1":"Lux CF SL 6.0","2":"2020","3":"carbon","4":"11.70","5":"2439","6":"Mountain","7":"Cross-Country","8":"Lux","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/cross-country-bikes/lux/lux-cf-sl-6.0/2433.html"},{"1":"Neuron CF SLX 9","2":"2021","3":"carbon","4":"12.38","5":"5459","6":"Mountain","7":"Trail","8":"Neuron","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/trail-bikes/neuron/neuron-cf-slx-9/2634.html"},{"1":"Neuron CF LTD","2":"2021","3":"carbon","4":"13.26","5":"4869","6":"Mountain","7":"Trail","8":"Neuron","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/trail-bikes/neuron/neuron-cf-ltd/2633.html"},{"1":"Neuron CF 9 SL","2":"2021","3":"carbon","4":"13.08","5":"3899","6":"Mountain","7":"Trail","8":"Neuron","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/trail-bikes/neuron/neuron-cf-9-sl/2632.html"},{"1":"Neuron CF 9 WMN","2":"2021","3":"carbon","4":"13.34","5":"3219","6":"Mountain","7":"Trail","8":"Neuron","9":"female","10":"https://www.canyon.com/en-de/mountain-bikes/trail-bikes/neuron/neuron-cf-9-wmn/2631.html"},{"1":"Neuron CF 9","2":"2021","3":"carbon","4":"13.75","5":"3219","6":"Mountain","7":"Trail","8":"Neuron","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/trail-bikes/neuron/neuron-cf-9/2630.html"},{"1":"Neuron CF 8","2":"2021","3":"carbon","4":"14.06","5":"2729","6":"Mountain","7":"Trail","8":"Neuron","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/trail-bikes/neuron/neuron-cf-8/2629.html"},{"1":"Neuron 7 WMN","2":"2021","3":"aluminium","4":"14.37","5":"2239","6":"Mountain","7":"Trail","8":"Neuron","9":"female","10":"https://www.canyon.com/en-de/mountain-bikes/trail-bikes/neuron/neuron-7-wmn/2628.html"},{"1":"Neuron 7","2":"2021","3":"aluminium","4":"14.77","5":"2239","6":"Mountain","7":"Trail","8":"Neuron","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/trail-bikes/neuron/neuron-7/2627.html"},{"1":"Neuron 6 WMN","2":"2021","3":"aluminium","4":"14.94","5":"1849","6":"Mountain","7":"Trail","8":"Neuron","9":"female","10":"https://www.canyon.com/en-de/mountain-bikes/trail-bikes/neuron/neuron-6-wmn/2626.html"},{"1":"Neuron 6","2":"2021","3":"aluminium","4":"15.26","5":"1849","6":"Mountain","7":"Trail","8":"Neuron","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/trail-bikes/neuron/neuron-6/2625.html"},{"1":"Neuron Young Hero","2":"2021","3":"aluminium","4":"13.96","5":"1459","6":"Mountain","7":"Trail","8":"Neuron","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/trail-bikes/neuron/neuron-young-hero/2624.html"},{"1":"Neuron WMN AL 7.0","2":"2020","3":"aluminium","4":"13.60","5":"2139","6":"Mountain","7":"Trail","8":"Neuron","9":"female","10":"https://www.canyon.com/en-de/mountain-bikes/trail-bikes/neuron/neuron-wmn-al-7.0/2470.html"},{"1":"Neuron AL 7.0","2":"2020","3":"aluminium","4":"14.20","5":"2139","6":"Mountain","7":"Trail","8":"Neuron","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/trail-bikes/neuron/neuron-al-7.0/2468.html"},{"1":"Neuron AL 6.0","2":"2020","3":"aluminium","4":"14.60","5":"1749","6":"Mountain","7":"Trail","8":"Neuron","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/trail-bikes/neuron/neuron-al-6.0/2467.html"},{"1":"Neuron CF 9.0 SL","2":"2020","3":"carbon","4":"12.80","5":"3609","6":"Mountain","7":"Trail","8":"Neuron","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/trail-bikes/neuron/neuron-cf-9.0-sl/2473.html"},{"1":"Neuron:ON 9.0","2":"2020","3":"aluminium","4":"22.90","5":"4389","6":"E-Bikes","7":"E-Mountain","8":"Neuron:ON","9":"unisex","10":"https://www.canyon.com/en-de/e-bikes/e-mountain-bikes/neuron-on/neuron-on-9.0/2258.html"},{"1":"Neuron:ON 8.0","2":"2020","3":"aluminium","4":"23.40","5":"3899","6":"E-Bikes","7":"E-Mountain","8":"Neuron:ON","9":"unisex","10":"https://www.canyon.com/en-de/e-bikes/e-mountain-bikes/neuron-on/neuron-on-8.0/2257.html"},{"1":"Neuron:ON WMN 7.0","2":"2020","3":"aluminium","4":"23.00","5":"3609","6":"E-Bikes","7":"E-Mountain","8":"Neuron:ON","9":"female","10":"https://www.canyon.com/en-de/e-bikes/e-mountain-bikes/neuron-on/neuron-on-wmn-7.0/2255.html"},{"1":"Neuron:ON 7.0","2":"2020","3":"aluminium","4":"23.68","5":"3609","6":"E-Bikes","7":"E-Mountain","8":"Neuron:ON","9":"unisex","10":"https://www.canyon.com/en-de/e-bikes/e-mountain-bikes/neuron-on/neuron-on-7.0/2256.html"},{"1":"Sender CFR","2":"2021","3":"aluminium","4":"15.80","5":"5649","6":"Mountain","7":"Downhill","8":"Sender","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/downhill-bikes/sender/sender-cfr/2251.html"},{"1":"Sender CFR FMD","2":"2021","3":"carbon","4":"17.20","5":"4579","6":"Mountain","7":"Downhill","8":"Sender","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/downhill-bikes/sender/sender-cfr-fmd/2250.html"},{"1":"Sender 6","2":"2020","3":"aluminium","4":"16.69","5":"2339","6":"Mountain","7":"Downhill","8":"Sender","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/downhill-bikes/sender/sender-6/2249.html"},{"1":"Spectral 6","2":"2021","3":"aluminium","4":"14.82","5":"2529","6":"Mountain","7":"Trail","8":"Spectral","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/trail-bikes/spectral/spectral-6/2675.html"},{"1":"Spectral 5","2":"2021","3":"aluminium","4":"14.61","5":"2139","6":"Mountain","7":"Trail","8":"Spectral","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/trail-bikes/spectral/spectral-5/2674.html"},{"1":"Spectral 6 WMN","2":"2021","3":"aluminium","4":"14.50","5":"2139","6":"Mountain","7":"Trail","8":"Spectral","9":"female","10":"https://www.canyon.com/en-de/mountain-bikes/trail-bikes/spectral/spectral-6-wmn/2680.html"},{"1":"Spectral CF 8","2":"2021","3":"carbon","4":"14.16","5":"3509","6":"Mountain","7":"Trail","8":"Spectral","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/trail-bikes/spectral/spectral-cf-8/2677.html"},{"1":"Spectral CF 7 WMN","2":"2021","3":"carbon","4":"13.80","5":"3119","6":"Mountain","7":"Trail","8":"Spectral","9":"female","10":"https://www.canyon.com/en-de/mountain-bikes/trail-bikes/spectral/spectral-cf-7-wmn/2681.html"},{"1":"Spectral CF 9","2":"2021","3":"carbon","4":"13.33","5":"4189","6":"Mountain","7":"Trail","8":"Spectral","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/trail-bikes/spectral/spectral-cf-9/2678.html"},{"1":"Spectral CF 7","2":"2021","3":"carbon","4":"13.84","5":"2919","6":"Mountain","7":"Trail","8":"Spectral","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/trail-bikes/spectral/spectral-cf-7/2676.html"},{"1":"Spectral WMN CFR 9.0","2":"2020","3":"carbon","4":"12.90","5":"3899","6":"Mountain","7":"Trail","8":"Spectral","9":"female","10":"https://www.canyon.com/en-de/mountain-bikes/trail-bikes/spectral/spectral-wmn-cfr-9.0/2238.html"},{"1":"Spectral CFR 9.0","2":"2020","3":"carbon","4":"12.70","5":"4579","6":"Mountain","7":"Trail","8":"Spectral","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/trail-bikes/spectral/spectral-cfr-9.0/2234.html"},{"1":"Spectral CF 9.0","2":"2020","3":"carbon","4":"13.30","5":"3509","6":"Mountain","7":"Trail","8":"Spectral","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/trail-bikes/spectral/spectral-cf-9.0/2233.html"},{"1":"Spectral WMN CF 8.0","2":"2020","3":"carbon","4":"13.40","5":"2729","6":"Mountain","7":"Trail","8":"Spectral","9":"female","10":"https://www.canyon.com/en-de/mountain-bikes/trail-bikes/spectral/spectral-wmn-cf-8.0/2237.html"},{"1":"Spectral:ON CF 9.0","2":"2020","3":"carbon","4":"21.35","5":"5839","6":"E-Bikes","7":"E-Mountain","8":"Spectral:ON","9":"unisex","10":"https://www.canyon.com/en-de/e-bikes/e-mountain-bikes/spectral-on/spectral-on-cf-9.0/2262.html"},{"1":"Spectral:ON CF 8.0","2":"2020","3":"carbon","4":"21.85","5":"4869","6":"E-Bikes","7":"E-Mountain","8":"Spectral:ON","9":"unisex","10":"https://www.canyon.com/en-de/e-bikes/e-mountain-bikes/spectral-on/spectral-on-cf-8.0/2261.html"},{"1":"Spectral:ON CF 7.0","2":"2020","3":"carbon","4":"22.15","5":"3889","6":"E-Bikes","7":"E-Mountain","8":"Spectral:ON","9":"unisex","10":"https://www.canyon.com/en-de/e-bikes/e-mountain-bikes/spectral-on/spectral-on-cf-7.0/2260.html"},{"1":"Spectral:ON WMN CF 7.0","2":"2020","3":"carbon","4":"22.02","5":"3889","6":"E-Bikes","7":"E-Mountain","8":"Spectral:ON","9":"female","10":"https://www.canyon.com/en-de/e-bikes/e-mountain-bikes/spectral-on/spectral-on-wmn-cf-7.0/2259.html"},{"1":"Stitched 720","2":"2020","3":"aluminium","4":"12.55","5":"1749","6":"Mountain","7":"Dirt Jump","8":"Stitched","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/dirt-jump-bikes/stitched/stitched-720/2368.html"},{"1":"Stitched 360 Pro","2":"2020","3":"aluminium","4":"11.50","5":"1219","6":"Mountain","7":"Dirt Jump","8":"Stitched","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/dirt-jump-bikes/stitched/stitched-360-pro/2367.html"},{"1":"Stitched 360","2":"2020","3":"aluminium","4":"12.20","5":"829","6":"Mountain","7":"Dirt Jump","8":"Stitched","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/dirt-jump-bikes/stitched/stitched-360/2366.html"},{"1":"Strive CF 9.0","2":"2020","3":"carbon","4":"14.18","5":"4679","6":"Mountain","7":"Enduro","8":"Strive","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/enduro-bikes/strive/strive-cf-9.0/2241.html"},{"1":"Strive CFR","2":"2020","3":"aluminium","4":"13.36","5":"5849","6":"Mountain","7":"Enduro","8":"Strive","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/enduro-bikes/strive/strive-cfr/2242.html"},{"1":"Strive CF 7.0","2":"2020","3":"carbon","4":"15.04","5":"2919","6":"Mountain","7":"Enduro","8":"Strive","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/enduro-bikes/strive/strive-cf-7.0/2239.html"},{"1":"Strive CF 8.0","2":"2020","3":"carbon","4":"14.60","5":"3699","6":"Mountain","7":"Enduro","8":"Strive","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/enduro-bikes/strive/strive-cf-8.0/2240.html"},{"1":"Torque CF 8.0","2":"2020","3":"carbon","4":"14.40","5":"3899","6":"Mountain","7":"Enduro","8":"Torque","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/enduro-bikes/torque/torque-cf-8.0/2247.html"},{"1":"Torque CF 9.0","2":"2020","3":"carbon","4":"14.35","5":"4679","6":"Mountain","7":"Enduro","8":"Torque","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/enduro-bikes/torque/torque-cf-9.0/2248.html"},{"1":"Torque AL 6.0","2":"2020","3":"aluminium","4":"15.60","5":"2729","6":"Mountain","7":"Enduro","8":"Torque","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/enduro-bikes/torque/torque-al-6.0/2245.html"},{"1":"Torque CF 7.0","2":"2020","3":"carbon","4":"14.60","5":"3219","6":"Mountain","7":"Enduro","8":"Torque","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/enduro-bikes/torque/torque-cf-7.0/2246.html"},{"1":"Torque CF 9.0","2":"2019","3":"carbon","4":"14.40","5":"4679","6":"Mountain","7":"Enduro","8":"Torque","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/enduro-bikes/torque/torque-cf-9.0/2017.html"},{"1":"Torque AL 5.0","2":"2020","3":"aluminium","4":"15.75","5":"2239","6":"Mountain","7":"Enduro","8":"Torque","9":"unisex","10":"https://www.canyon.com/en-de/mountain-bikes/enduro-bikes/torque/torque-al-5.0/2244.html"},{"1":"Commuter:ON 7","2":"2021","3":"aluminium","4":"17.60","5":"3219","6":"E-Bikes","7":"E-City","8":"Commuter:ON","9":"unisex","10":"https://www.canyon.com/en-de/e-bikes/e-city-bikes/commuter-on/commuter-on-7/2356.html"},{"1":"Commuter:ON 7 WMN","2":"2021","3":"aluminium","4":"17.80","5":"3219","6":"E-Bikes","7":"E-City","8":"Commuter:ON","9":"female","10":"https://www.canyon.com/en-de/e-bikes/e-city-bikes/commuter-on/commuter-on-7-wmn/2926.html"},{"1":"Pathlite:ON 7","2":"2021","3":"aluminium","4":"24.20","5":"3309","6":"E-Bikes","7":"E-Trekking","8":"Pathlite:ON","9":"unisex","10":"https://www.canyon.com/en-de/e-bikes/e-trekking-bikes/pathlite-on/pathlite-on-7/2800.html"},{"1":"Pathlite:ON 6","2":"2021","3":"aluminium","4":"21.30","5":"2829","6":"E-Bikes","7":"E-Trekking","8":"Pathlite:ON","9":"unisex","10":"https://www.canyon.com/en-de/e-bikes/e-trekking-bikes/pathlite-on/pathlite-on-6/2799.html"},{"1":"Pathlite:ON 9.0","2":"2020","3":"aluminium","4":"27.50","5":"4869","6":"E-Bikes","7":"E-Trekking","8":"Pathlite:ON","9":"unisex","10":"https://www.canyon.com/en-de/e-bikes/e-trekking-bikes/pathlite-on/pathlite-on-9.0/2343.html"},{"1":"Pathlite:ON 8.0","2":"2020","3":"aluminium","4":"27.04","5":"3789","6":"E-Bikes","7":"E-Trekking","8":"Pathlite:ON","9":"unisex","10":"https://www.canyon.com/en-de/e-bikes/e-trekking-bikes/pathlite-on/pathlite-on-8.0/2342.html"},{"1":"Pathlite:ON 7.0","2":"2020","3":"aluminium","4":"24.06","5":"3119","6":"E-Bikes","7":"E-Trekking","8":"Pathlite:ON","9":"unisex","10":"https://www.canyon.com/en-de/e-bikes/e-trekking-bikes/pathlite-on/pathlite-on-7.0/2341.html"},{"1":"Pathlite:ON 6.0","2":"2020","3":"aluminium","4":"21.15","5":"2829","6":"E-Bikes","7":"E-Trekking","8":"Pathlite:ON","9":"unisex","10":"https://www.canyon.com/en-de/e-bikes/e-trekking-bikes/pathlite-on/pathlite-on-6.0/2340.html"},{"1":"Pathlite:ON 5.0","2":"2020","3":"aluminium","4":"21.05","5":"2529","6":"E-Bikes","7":"E-Trekking","8":"Pathlite:ON","9":"unisex","10":"https://www.canyon.com/en-de/e-bikes/e-trekking-bikes/pathlite-on/pathlite-on-5.0/2339.html"},{"1":"Precede:ON CF 9","2":"2021","3":"carbon","4":"22.15","5":"4869","6":"E-Bikes","7":"E-City","8":"Precede:ON","9":"unisex","10":"https://www.canyon.com/en-de/e-bikes/e-city-bikes/precede-on/precede-on-cf-9/2804.html"},{"1":"Precede:ON CF 9 ST","2":"2021","3":"carbon","4":"23.20","5":"4869","6":"E-Bikes","7":"E-City","8":"Precede:ON","9":"unisex","10":"https://www.canyon.com/en-de/e-bikes/e-city-bikes/precede-on/precede-on-cf-9-st/2928.html"},{"1":"Precede:ON CF 8 ST","2":"2021","3":"carbon","4":"21.85","5":"4189","6":"E-Bikes","7":"E-City","8":"Precede:ON","9":"unisex","10":"https://www.canyon.com/en-de/e-bikes/e-city-bikes/precede-on/precede-on-cf-8-st/2927.html"},{"1":"Precede:ON CF 8","2":"2021","3":"carbon","4":"21.06","5":"4189","6":"E-Bikes","7":"E-City","8":"Precede:ON","9":"unisex","10":"https://www.canyon.com/en-de/e-bikes/e-city-bikes/precede-on/precede-on-cf-8/2803.html"},{"1":"Roadlite:ON AL 7.0","2":"2020","3":"aluminium","4":"15.50","5":"2299","6":"E-Bikes","7":"E-Fitness","8":"Roadlite:ON","9":"unisex","10":"https://www.canyon.com/en-de/e-bikes/e-fitness-bikes/roadlite-on/roadlite-on-al-7.0/2293.html"},{"1":"Roadlite:ON AL 8.0","2":"2020","3":"aluminium","4":"15.40","5":"3219","6":"E-Bikes","7":"E-Fitness","8":"Roadlite:ON","9":"unisex","10":"https://www.canyon.com/en-de/e-bikes/e-fitness-bikes/roadlite-on/roadlite-on-al-8.0/2294.html"},{"1":"Roadlite:ON AL 9.0","2":"2020","3":"aluminium","4":"14.90","5":"3609","6":"E-Bikes","7":"E-Fitness","8":"Roadlite:ON","9":"unisex","10":"https://www.canyon.com/en-de/e-bikes/e-fitness-bikes/roadlite-on/roadlite-on-al-9.0/2324.html"},{"1":"Commuter 5.0","2":"2020","3":"aluminium","4":"12.10","5":"1359","6":"Hybrid / City","7":"City","8":"Commuter","9":"unisex","10":"https://www.canyon.com/en-de/hybrid-city/citybikes/commuter/commuter-5.0/1955.html"},{"1":"Commuter 8.0","2":"2020","3":"aluminium","4":"12.20","5":"2339","6":"Hybrid / City","7":"City","8":"Commuter","9":"unisex","10":"https://www.canyon.com/en-de/hybrid-city/citybikes/commuter/commuter-8.0/1958.html"},{"1":"Commuter 6.0","2":"2020","3":"aluminium","4":"11.90","5":"1499","6":"Hybrid / City","7":"City","8":"Commuter","9":"unisex","10":"https://www.canyon.com/en-de/hybrid-city/citybikes/commuter/commuter-6.0/1956.html"},{"1":"Commuter Sport 8.0","2":"2020","3":"aluminium","4":"10.60","5":"1599","6":"Hybrid / City","7":"City","8":"Commuter","9":"unisex","10":"https://www.canyon.com/en-de/hybrid-city/citybikes/commuter/commuter-sport-8.0/1960.html"},{"1":"Commuter 4.0","2":"2020","3":"aluminium","4":"12.10","5":"1069","6":"Hybrid / City","7":"City","8":"Commuter","9":"unisex","10":"https://www.canyon.com/en-de/hybrid-city/citybikes/commuter/commuter-4.0/1954.html"},{"1":"Commuter Sport 5.0","2":"2020","3":"aluminium","4":"10.80","5":"899","6":"Hybrid / City","7":"City","8":"Commuter","9":"unisex","10":"https://www.canyon.com/en-de/hybrid-city/citybikes/commuter/commuter-sport-5.0/1959.html"},{"1":"Commuter 3.0","2":"2020","3":"aluminium","4":"11.00","5":"799","6":"Hybrid / City","7":"City","8":"Commuter","9":"unisex","10":"https://www.canyon.com/en-de/hybrid-city/citybikes/commuter/commuter-3.0/1953.html"},{"1":"Pathlite 7 WMN","2":"2021","3":"aluminium","4":"11.97","5":"1459","6":"Hybrid / City","7":"Touring","8":"Pathlite","9":"female","10":"https://www.canyon.com/en-de/hybrid-city/touring-bikes/pathlite/pathlite-7-wmn/2795.html"},{"1":"Pathlite 6 WMN","2":"2021","3":"aluminium","4":"12.70","5":"1069","6":"Hybrid / City","7":"Touring","8":"Pathlite","9":"female","10":"https://www.canyon.com/en-de/hybrid-city/touring-bikes/pathlite/pathlite-6-wmn/2793.html"},{"1":"Pathlite 5 WMN","2":"2021","3":"aluminium","4":"12.84","5":"879","6":"Hybrid / City","7":"Touring","8":"Pathlite","9":"female","10":"https://www.canyon.com/en-de/hybrid-city/touring-bikes/pathlite/pathlite-5-wmn/2791.html"},{"1":"Pathlite 5","2":"2021","3":"aluminium","4":"12.92","5":"879","6":"Hybrid / City","7":"Touring","8":"Pathlite","9":"unisex","10":"https://www.canyon.com/en-de/hybrid-city/touring-bikes/pathlite/pathlite-5/2790.html"},{"1":"Pathlite AL SL 8.0","2":"2020","3":"aluminium","4":"11.70","5":"1659","6":"Hybrid / City","7":"Touring","8":"Pathlite","9":"unisex","10":"https://www.canyon.com/en-de/hybrid-city/touring-bikes/pathlite/pathlite-al-sl-8.0/2335.html"},{"1":"Pathlite AL SL 7.0","2":"2020","3":"aluminium","4":"11.40","5":"1459","6":"Hybrid / City","7":"Touring","8":"Pathlite","9":"unisex","10":"https://www.canyon.com/en-de/hybrid-city/touring-bikes/pathlite/pathlite-al-sl-7.0/2334.html"},{"1":"Pathlite AL 6.0","2":"2020","3":"aluminium","4":"12.69","5":"1069","6":"Hybrid / City","7":"Touring","8":"Pathlite","9":"unisex","10":"https://www.canyon.com/en-de/hybrid-city/touring-bikes/pathlite/pathlite-al-6.0/2333.html"},{"1":"Pathlite WMN AL 6.0","2":"2020","3":"aluminium","4":"12.79","5":"899","6":"Hybrid / City","7":"Touring","8":"Pathlite","9":"female","10":"https://www.canyon.com/en-de/hybrid-city/touring-bikes/pathlite/pathlite-wmn-al-6.0/2336.html"},{"1":"Roadlite 6 WMN","2":"2021","3":"aluminium","4":"9.75","5":"1069","6":"Hybrid / City","7":"City","8":"Roadlite","9":"female","10":"https://www.canyon.com/en-de/hybrid-city/citybikes/roadlite/roadlite-6-wmn/2783.html"},{"1":"Roadlite 6","2":"2021","3":"aluminium","4":"9.90","5":"1069","6":"Hybrid / City","7":"City","8":"Roadlite","9":"unisex","10":"https://www.canyon.com/en-de/hybrid-city/citybikes/roadlite/roadlite-6/2782.html"},{"1":"Roadlite 5 WMN","2":"2021","3":"aluminium","4":"9.80","5":"779","6":"Hybrid / City","7":"City","8":"Roadlite","9":"female","10":"https://www.canyon.com/en-de/hybrid-city/citybikes/roadlite/roadlite-5-wmn/2781.html"},{"1":"Roadlite 5","2":"2021","3":"aluminium","4":"9.90","5":"779","6":"Hybrid / City","7":"City","8":"Roadlite","9":"unisex","10":"https://www.canyon.com/en-de/hybrid-city/citybikes/roadlite/roadlite-5/2780.html"},{"1":"Roadlite AL SL 8.0","2":"2020","3":"aluminium","4":"9.25","5":"1359","6":"Hybrid / City","7":"City","8":"Roadlite","9":"unisex","10":"https://www.canyon.com/en-de/hybrid-city/citybikes/roadlite/roadlite-al-sl-8.0/2345.html"},{"1":"Roadlite WMN AL SL 8.0","2":"2020","3":"aluminium","4":"9.15","5":"1159","6":"Hybrid / City","7":"City","8":"Roadlite","9":"female","10":"https://www.canyon.com/en-de/hybrid-city/citybikes/roadlite/roadlite-wmn-al-sl-8.0/2347.html"},{"1":"Roadlite AL 7.0","2":"2020","3":"aluminium","4":"9.98","5":"999","6":"Hybrid / City","7":"City","8":"Roadlite","9":"unisex","10":"https://www.canyon.com/en-de/hybrid-city/citybikes/roadlite/roadlite-al-7.0/2344.html"},{"1":"Roadlite CF 9.0","2":"2020","3":"carbon","4":"8.00","5":"2149","6":"Hybrid / City","7":"City","8":"Roadlite","9":"unisex","10":"https://www.canyon.com/en-de/hybrid-city/citybikes/roadlite/roadlite-cf-9.0/1977.html"},{"1":"Roadlite WMN CF 8.0","2":"2020","3":"carbon","4":"8.30","5":"1949","6":"Hybrid / City","7":"City","8":"Roadlite","9":"female","10":"https://www.canyon.com/en-de/hybrid-city/citybikes/roadlite/roadlite-wmn-cf-8.0/1976.html"},{"1":"Roadlite CF 9.0 LTD","2":"2020","3":"carbon","4":"7.90","5":"2919","6":"Hybrid / City","7":"City","8":"Roadlite","9":"unisex","10":"https://www.canyon.com/en-de/hybrid-city/citybikes/roadlite/roadlite-cf-9.0-ltd/1979.html"},{"1":"Roadlite CF 8.0","2":"2020","3":"carbon","4":"8.30","5":"1749","6":"Hybrid / City","7":"City","8":"Roadlite","9":"unisex","10":"https://www.canyon.com/en-de/hybrid-city/citybikes/roadlite/roadlite-cf-8.0/1975.html"},{"1":"Roadlite WMN CF 7.0","2":"2020","3":"carbon","4":"8.80","5":"1559","6":"Hybrid / City","7":"City","8":"Roadlite","9":"female","10":"https://www.canyon.com/en-de/hybrid-city/citybikes/roadlite/roadlite-wmn-cf-7.0/1974.html"},{"1":"Roadlite CF 7.0","2":"2020","3":"carbon","4":"8.80","5":"1359","6":"Hybrid / City","7":"City","8":"Roadlite","9":"unisex","10":"https://www.canyon.com/en-de/hybrid-city/citybikes/roadlite/roadlite-cf-7.0/1973.html"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+</section><section id="splitting-the-data-and-building-features-using-recipes" class="level2" data-number="2.2"><h2 data-number="2.2" class="anchored" data-anchor-id="splitting-the-data-and-building-features-using-recipes">
+<span class="header-section-number">2.2</span> Splitting the Data and Building features using recipes</h2>
+<div class="cell" data-hash="02_ml02_sup_ML_cache/html/unnamed-chunk-6_3652c858c5b6d25699cdab50164ff45f">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>dataset <span class="ot">&lt;-</span> bike_features_tbl <span class="sc">%&gt;%</span> <span class="fu">select</span> (<span class="st">"Rear Derailleur"</span>,<span class="st">"model"</span>,<span class="st">"model_year"</span>,<span class="st">"frame_material"</span>,<span class="st">"weight"</span>,<span class="st">"price"</span>,<span class="st">"category_1"</span>,<span class="st">"category_2"</span>,<span class="st">"category_3"</span>,<span class="st">"gender"</span>) <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="st">"Rear_Derailleur"</span><span class="ot">=</span><span class="st">"Rear Derailleur"</span>) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">id =</span> <span class="fu">row_number</span>())</span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="fu">set.seed</span>(<span class="dv">100</span>)</span>
+<span id="cb7-3"><a href="#cb7-3"></a>data_split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(dataset, <span class="at">prop =</span> <span class="fl">0.85</span>)</span>
+<span id="cb7-4"><a href="#cb7-4"></a>train_data <span class="ot">&lt;-</span> <span class="fu">training</span>(data_split)</span>
+<span id="cb7-5"><a href="#cb7-5"></a>test_data  <span class="ot">&lt;-</span> <span class="fu">testing</span>(data_split)</span>
+<span id="cb7-6"><a href="#cb7-6"></a>train_recipe <span class="ot">&lt;-</span> <span class="fu">recipe</span>(price <span class="sc">~</span> ., <span class="at">data =</span> train_data)  <span class="sc">%&gt;%</span> <span class="fu">step_dummy</span>(<span class="fu">all_nominal</span>(), <span class="sc">-</span><span class="fu">all_outcomes</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-hash="02_ml02_sup_ML_cache/html/unnamed-chunk-7_ff64e15295cba406b0a84f2c6d44ea33">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>rec_data <span class="ot">&lt;-</span> <span class="fu">bake</span>(<span class="fu">prep</span>(train_recipe),<span class="at">new_data =</span> <span class="cn">NULL</span>) </span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="fu">summary</span>(train_recipe)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["variable"],"name":[1],"type":["chr"],"align":["left"]},{"label":["type"],"name":[2],"type":["list"],"align":["right"]},{"label":["role"],"name":[3],"type":["chr"],"align":["left"]},{"label":["source"],"name":[4],"type":["chr"],"align":["left"]}],"data":[{"1":"Rear_Derailleur","2":"<chr [3]>","3":"predictor","4":"original"},{"1":"model","2":"<chr [3]>","3":"predictor","4":"original"},{"1":"model_year","2":"<chr [2]>","3":"predictor","4":"original"},{"1":"frame_material","2":"<chr [3]>","3":"predictor","4":"original"},{"1":"weight","2":"<chr [2]>","3":"predictor","4":"original"},{"1":"category_1","2":"<chr [3]>","3":"predictor","4":"original"},{"1":"category_2","2":"<chr [3]>","3":"predictor","4":"original"},{"1":"category_3","2":"<chr [3]>","3":"predictor","4":"original"},{"1":"gender","2":"<chr [3]>","3":"predictor","4":"original"},{"1":"id","2":"<chr [2]>","3":"predictor","4":"original"},{"1":"price","2":"<chr [2]>","3":"outcome","4":"original"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+</section></section><section id="xgboost-building" class="level1" data-number="3"><h1 data-number="3">
+<span class="header-section-number">3</span> XGBOOST Building</h1>
+<div class="cell" data-hash="02_ml02_sup_ML_cache/html/unnamed-chunk-8_690ff2684fc30d85130d9cd566a5c7de">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="co"># 4.3 XGBOOST ----</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="co"># 4.3.1 Model ----</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb9-5"><a href="#cb9-5"></a>model_boost_tree_xgboost <span class="ot">&lt;-</span> <span class="fu">boost_tree</span>(</span>
+<span id="cb9-6"><a href="#cb9-6"></a>    <span class="at">mode =</span> <span class="st">"regression"</span>,</span>
+<span id="cb9-7"><a href="#cb9-7"></a>    <span class="at">mtry =</span> <span class="dv">30</span>,</span>
+<span id="cb9-8"><a href="#cb9-8"></a>    <span class="at">learn_rate =</span> <span class="fl">0.3</span>,</span>
+<span id="cb9-9"><a href="#cb9-9"></a>    <span class="at">tree_depth =</span> <span class="dv">7</span></span>
+<span id="cb9-10"><a href="#cb9-10"></a>    ) <span class="sc">%&gt;%</span></span>
+<span id="cb9-11"><a href="#cb9-11"></a>    <span class="fu">set_engine</span>(<span class="st">"xgboost"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section><section id="bundling-the-model-and-recipe-with-the-workflow-package" class="level1" data-number="4"><h1 data-number="4">
+<span class="header-section-number">4</span> Bundling the model and recipe with the workflow package</h1>
+<div class="cell" data-hash="02_ml02_sup_ML_cache/html/unnamed-chunk-9_ac72ef12d319b76c2442cfa879bb42f5">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>rec_workflow <span class="ot">&lt;-</span> </span>
+<span id="cb10-2"><a href="#cb10-2"></a>  <span class="fu">workflow</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb10-3"><a href="#cb10-3"></a>  <span class="fu">add_model</span>(model_boost_tree_xgboost) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-4"><a href="#cb10-4"></a>  <span class="fu">add_recipe</span>(train_recipe)</span>
+<span id="cb10-5"><a href="#cb10-5"></a>rec_workflow</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; == Workflow ====================================================================
+#&gt; Preprocessor: Recipe
+#&gt; Model: boost_tree()
+#&gt; 
+#&gt; -- Preprocessor ----------------------------------------------------------------
+#&gt; 1 Recipe Step
+#&gt; 
+#&gt; * step_dummy()
+#&gt; 
+#&gt; -- Model -----------------------------------------------------------------------
+#&gt; Boosted Tree Model Specification (regression)
+#&gt; 
+#&gt; Main Arguments:
+#&gt;   mtry = 30
+#&gt;   tree_depth = 7
+#&gt;   learn_rate = 0.3
+#&gt; 
+#&gt; Computational engine: xgboost</code></pre>
+</div>
+</div>
+<div class="cell" data-hash="02_ml02_sup_ML_cache/html/unnamed-chunk-10_0b8ba1b309c6b6e440dc84381b5103a8">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>rec_fit <span class="ot">&lt;-</span> </span>
+<span id="cb12-2"><a href="#cb12-2"></a>  rec_workflow <span class="sc">%&gt;%</span> </span>
+<span id="cb12-3"><a href="#cb12-3"></a>  <span class="fu">fit</span>(<span class="at">data =</span> train_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section><section id="evaluating-the-model-with-the-yardstick-package" class="level1" data-number="5"><h1 data-number="5">
+<span class="header-section-number">5</span> Evaluating the model with the yardstick package</h1>
+<div class="cell" data-hash="02_ml02_sup_ML_cache/html/unnamed-chunk-11_d4fe8659d8df659a74a048115a76726f">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>rec_fit <span class="sc">%&gt;%</span></span>
+<span id="cb13-2"><a href="#cb13-2"></a>    <span class="fu">predict</span>(<span class="at">new_data =</span> test_data) <span class="sc">%&gt;%</span></span>
+<span id="cb13-3"><a href="#cb13-3"></a>    <span class="fu">bind_cols</span>(test_data <span class="sc">%&gt;%</span> <span class="fu">select</span>(price)) <span class="sc">%&gt;%</span></span>
+<span id="cb13-4"><a href="#cb13-4"></a>    yardstick<span class="sc">::</span><span class="fu">metrics</span>(<span class="at">truth =</span> price, <span class="at">estimate =</span> .pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[".metric"],"name":[1],"type":["chr"],"align":["left"]},{"label":[".estimator"],"name":[2],"type":["chr"],"align":["left"]},{"label":[".estimate"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"rmse","2":"standard","3":"797.4390916"},{"1":"rsq","2":"standard","3":"0.8421598"},{"1":"mae","2":"standard","3":"644.6533343"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+</section><section id="tuning-the-model" class="level1" data-number="6"><h1 data-number="6">
+<span class="header-section-number">6</span> Tuning the Model</h1>
+<div class="cell" data-hash="02_ml02_sup_ML_cache/html/unnamed-chunk-12_d6c64634a78ec994dacf7257c4741b0c">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>folds <span class="ot">&lt;-</span> <span class="fu">vfold_cv</span>(train_data, <span class="at">v =</span> <span class="dv">10</span>)</span>
+<span id="cb14-2"><a href="#cb14-2"></a>rec_workflow_tuning <span class="ot">&lt;-</span></span>
+<span id="cb14-3"><a href="#cb14-3"></a>  rec_workflow <span class="sc">%&gt;%</span></span>
+<span id="cb14-4"><a href="#cb14-4"></a>  <span class="fu">fit_resamples</span>(folds)</span>
+<span id="cb14-5"><a href="#cb14-5"></a><span class="fu">show_best</span>(rec_workflow_tuning, <span class="at">metric =</span> <span class="st">"rmse"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[".metric"],"name":[1],"type":["chr"],"align":["left"]},{"label":[".estimator"],"name":[2],"type":["chr"],"align":["left"]},{"label":["mean"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["n"],"name":[4],"type":["int"],"align":["right"]},{"label":["std_err"],"name":[5],"type":["dbl"],"align":["right"]},{"label":[".config"],"name":[6],"type":["chr"],"align":["left"]}],"data":[{"1":"rmse","2":"standard","3":"878.4481","4":"10","5":"79.59768","6":"Preprocessor1_Model1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">collect_metrics</span>(rec_workflow_tuning)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[".metric"],"name":[1],"type":["chr"],"align":["left"]},{"label":[".estimator"],"name":[2],"type":["chr"],"align":["left"]},{"label":["mean"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["n"],"name":[4],"type":["int"],"align":["right"]},{"label":["std_err"],"name":[5],"type":["dbl"],"align":["right"]},{"label":[".config"],"name":[6],"type":["chr"],"align":["left"]}],"data":[{"1":"rmse","2":"standard","3":"878.4481186","4":"10","5":"79.59767547","6":"Preprocessor1_Model1"},{"1":"rsq","2":"standard","3":"0.7581926","4":"10","5":"0.03049589","6":"Preprocessor1_Model1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+
+
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'alternate';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

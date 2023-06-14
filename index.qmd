@@ -1,21 +1,9 @@
 ---
 title: "My Lab Journal"
-subtitle: "Business Data Science Basics"
-author: "Joschka Schwarz"
+subtitle: "Business Decisions with Machine Learning"
+author: "Shahrokh Vahedi"
 ---
 
 ![](assets/logo/TIE_logo.svg){width=80% fig-align="center"}
 
-This is a template example for lab journaling. Students in the data science courses at the Institute of Entrepreneurship will use this template to learn R for business analytics. Students can replace this text as they wish.
-
-## How to use
-
-1. Accept the assignment and get your own github repo.
-
-2. Blog/journal what you are doing in R, by editing the `.qmd` files. 
-
-3. See the links page for lots of helpful links on learning R.
-
-4. Change everything to make it your own.
-
-5. Make sure to render you website everytime before you want to upload changes
+Welcome to my web journal, dedicated to showcasing the fascinating outcomes of my course "Business Decisions with Machine Learning" using the powerful R programming language. As an enthusiastic learner and explorer of the world of data-driven decision making, I have embarked on a journey to uncover the potential of machine learning in shaping impactful business strategies. Through this journal, I will be sharing the results of various tasks and challenges undertaken during the course, providing valuable insights and practical applications of machine learning techniques in real-world scenarios. Join me on this exciting voyage as we dive into the realm of business decisions powered by the wonders of R programming and unleash the true potential of data-driven innovation. Let's unlock the secrets that lie within and revolutionize the way we approach business challenges.

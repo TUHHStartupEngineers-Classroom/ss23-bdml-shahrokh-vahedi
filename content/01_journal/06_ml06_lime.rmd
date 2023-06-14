@@ -1,0 +1,162 @@
+---
+title: "06 Explaining Black-Box Models With LIME"
+date: "2023-06-14"
+output:
+  html_document:
+    toc: yes
+    toc_float: yes
+    df_print: paged
+    collapsed: no
+    number_sections: yes
+    toc_depth: 3
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message=FALSE,warning=FALSE, cache=TRUE)
+```
+
+# Load model
+```{r}
+# LIME FEATURE EXPLANATION ----
+
+# 1. Setup ----
+
+# Load Libraries 
+
+library(h2o)
+h2o.init()
+library(recipes)
+library(readxl)
+library(tidyverse)
+library(tidyquant)
+library(lime)
+library(rsample)
+
+
+product_data <- read_csv("data05/product_backorders.csv") %>% 
+  mutate(product_backorder = went_on_backorder %>% str_to_lower() %>% str_detect("yes") %>% as.numeric()) %>% select(-c(went_on_backorder))
+glimpse(product_data)
+
+# Split into test and train
+
+split_obj<- initial_split(product_data, prop = 0.85)
+
+# Assign training and test data
+
+train_tbl<- training(split_obj)
+test_tbl<- testing(split_obj)
+
+# ML Preprocessing Recipe 
+recipe_obj <- recipe(product_backorder ~., data = train_tbl) %>% 
+    step_zv(all_predictors()) %>% 
+    step_dummy(all_nominal(),-all_outcomes()) %>%
+    prep()
+
+```
+
+```{r}
+# 2. Models ----
+
+h2o.init()
+
+automl_leader <- h2o.loadModel("data06/StackedEnsemble_AllModels_1_AutoML_1_20230613_221753")
+automl_leader
+```
+
+
+
+
+```{r}
+# 3. LIME ----
+
+# 3.1 Making Predictions ----
+
+predictions_tbl <- automl_leader %>% 
+    h2o.predict(newdata = as.h2o(test_tbl)) %>%
+    as.tibble() %>%
+    bind_cols(
+        test_tbl %>%
+            select(everything())
+    )
+
+predictions_tbl
+```
+
+```{r}
+summary(train_tbl)
+```
+
+
+# Part (1): Recreating plot_features()
+
+Take the explanation data and use the first case to create a plot similar to the output of plot_features().
+
+```{r}
+# 3.2 Single Explanation ----
+
+
+explainer <- train_tbl %>%
+    select(-product_backorder) %>%
+    lime(
+        model           = automl_leader,
+        bin_continuous  = TRUE,
+        n_bins          = 4,
+        quantile_bins   = TRUE
+    )
+
+
+
+explanation <- test_tbl %>%
+    slice(1) %>%
+    select(-product_backorder) %>%
+    lime::explain(
+    
+        # Pass our explainer object
+        explainer = explainer,
+        # Because it is a binary classification model: 1
+        n_labels   = 1,
+        # number of features to be returned
+        n_features = 8,
+        # number of localized linear models
+        n_permutations = 5000,
+        # Let's start with 1
+        kernel_width   = 1
+    )
+
+explanation
+
+g <- plot_features(explanation = explanation, ncol = 1, cases = 1)
+g
+```
+
+# Part (2): Recreating plot_explanations()
+
+Take the full explanation data and recreate the second plot.
+
+
+```{r}
+multi_explanation <- test_tbl %>%
+    slice(1:20) %>%
+    select(-product_backorder) %>%
+    lime::explain(
+        explainer = explainer,
+        n_labels   = 1,
+        n_features = 8,
+        n_permutations = 5000,
+        kernel_width   = 0.5
+    )
+
+multi_explanation %>%
+    as.tibble()
+
+plot_explanations(multi_explanation)
+
+```
+
+
+
+
+
