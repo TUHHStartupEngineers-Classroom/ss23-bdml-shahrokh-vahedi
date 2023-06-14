@@ -5,7 +5,7 @@
 <meta name="generator" content="quarto-1.2.335">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Shahrokh Vahedi">
-<meta name="dcterms.date" content="2023-06-10">
+<meta name="dcterms.date" content="2023-06-13">
 <title>Business Decisions with Machine Learning - 04 Automated Machine Learning with H2O (II)</title>
 <style>
 code{white-space: pre-wrap;}
@@ -162,7 +162,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
  <span class="dropdown-text">04 Automated Machine Learning with H2O (II)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../content/01_journal/05_ml05_perf_meas.rmd">
+    <a class="dropdown-item" href="../../content/01_journal/05_ml05_perf_meas.html">
  <span class="dropdown-text">05 Performance Measures</span></a>
   </li>  
         <li>
@@ -212,7 +212,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">June 10, 2023</p>
+      <p class="date">June 13, 2023</p>
     </div>
   </div>
   
@@ -292,27 +292,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt; Rows: 16,195
 #&gt; Columns: 23
-#&gt; $ sku                 &lt;dbl&gt; 2003094, 1446382, 1181601, 2041493, 2898957, 19291~
-#&gt; $ national_inv        &lt;dbl&gt; 0, 2, 616, 10, 97, 33, 5, 8, 11, 508, 2, 6, 2, 3, ~
-#&gt; $ lead_time           &lt;dbl&gt; 4, 2, 2, 8, 2, 8, 2, 2, 8, 8, 9, 8, 12, 4, 14, 8, ~
-#&gt; $ in_transit_qty      &lt;dbl&gt; 0, 0, 0, 0, 27, 0, 0, 0, 0, 123, 0, 0, 0, 3, 0, 9,~
-#&gt; $ forecast_3_month    &lt;dbl&gt; 11, 0, 0, 0, 273, 0, 0, 0, 0, 1734, 0, 2, 0, 0, 0,~
-#&gt; $ forecast_6_month    &lt;dbl&gt; 11, 0, 0, 0, 525, 0, 0, 0, 3, 2690, 0, 8, 0, 2, 0,~
-#&gt; $ forecast_9_month    &lt;dbl&gt; 11, 0, 0, 0, 735, 13, 0, 1, 12, 2920, 0, 16, 0, 3,~
-#&gt; $ sales_1_month       &lt;dbl&gt; 0, 0, 1, 0, 73, 5, 0, 0, 5, 181, 0, 0, 0, 0, 0, 48~
-#&gt; $ sales_3_month       &lt;dbl&gt; 0, 0, 2, 0, 224, 22, 0, 1, 9, 572, 0, 4, 0, 2, 0, ~
-#&gt; $ sales_6_month       &lt;dbl&gt; 0, 0, 5, 0, 450, 38, 0, 2, 20, 1342, 0, 11, 0, 6, ~
-#&gt; $ sales_9_month       &lt;dbl&gt; 0, 0, 6, 0, 682, 67, 0, 2, 24, 3138, 0, 13, 0, 7, ~
-#&gt; $ min_bank            &lt;dbl&gt; 1, 0, 0, 1, 53, 5, 0, 0, 0, 209, 0, 0, 0, 0, 0, 96~
-#&gt; $ pieces_past_due     &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
-#&gt; $ perf_6_month_avg    &lt;dbl&gt; 0.24, 0.98, 0.99, 0.99, 0.93, 0.99, 0.99, 0.77, 0.~
-#&gt; $ perf_12_month_avg   &lt;dbl&gt; 0.14, 0.95, 0.97, 0.99, 0.89, 0.99, 0.99, 0.49, 0.~
-#&gt; $ local_bo_qty        &lt;dbl&gt; 0, 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0~
-#&gt; $ product_backorder   &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+#&gt; $ sku                 &lt;dbl&gt; 1838853, 1371461, 3104494, 1625544, 1610415, 14638~
+#&gt; $ national_inv        &lt;dbl&gt; 20, 201, 14, 11, 0, 9, 21, 12, 11, 66, 24, 128, 12~
+#&gt; $ lead_time           &lt;dbl&gt; 12, 2, 8, 2, NA, 2, 8, 12, 2, 4, 8, 8, 12, 2, 2, N~
+#&gt; $ in_transit_qty      &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+#&gt; $ forecast_3_month    &lt;dbl&gt; 0, 0, 12, 0, 50, 0, 0, 8, 10, 0, 19, 0, 0, 0, 12, ~
+#&gt; $ forecast_6_month    &lt;dbl&gt; 0, 0, 24, 0, 50, 0, 0, 8, 10, 0, 42, 0, 0, 0, 18, ~
+#&gt; $ forecast_9_month    &lt;dbl&gt; 0, 0, 36, 0, 50, 0, 0, 16, 10, 0, 58, 0, 0, 0, 24,~
+#&gt; $ sales_1_month       &lt;dbl&gt; 0, 8, 3, 1, 0, 1, 0, 3, 8, 1, 2, 1, 0, 0, 1, 0, 2,~
+#&gt; $ sales_3_month       &lt;dbl&gt; 0, 19, 8, 2, 0, 2, 1, 10, 11, 1, 12, 2, 0, 0, 4, 4~
+#&gt; $ sales_6_month       &lt;dbl&gt; 0, 41, 22, 4, 0, 5, 3, 23, 22, 1, 37, 3, 5, 0, 7, ~
+#&gt; $ sales_9_month       &lt;dbl&gt; 0, 60, 37, 6, 0, 8, 9, 38, 33, 5, 66, 3, 6, 0, 15,~
+#&gt; $ min_bank            &lt;dbl&gt; 1, 7, 2, 0, 0, 0, 0, 0, 1, 0, 9, 0, 1, 0, 1, 1, 1,~
+#&gt; $ pieces_past_due     &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0~
+#&gt; $ perf_6_month_avg    &lt;dbl&gt; 0.58, 0.84, 0.99, 0.38, -99.00, 0.87, 0.80, 0.83, ~
+#&gt; $ perf_12_month_avg   &lt;dbl&gt; 0.58, 0.82, 0.98, 0.40, -99.00, 0.75, 0.82, 0.90, ~
+#&gt; $ local_bo_qty        &lt;dbl&gt; 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+#&gt; $ product_backorder   &lt;dbl&gt; 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
 #&gt; $ potential_issue_Yes &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
-#&gt; $ deck_risk_Yes       &lt;dbl&gt; 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+#&gt; $ deck_risk_Yes       &lt;dbl&gt; 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,~
 #&gt; $ oe_constraint_Yes   &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
-#&gt; $ ppap_risk_Yes       &lt;dbl&gt; 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,~
+#&gt; $ ppap_risk_Yes       &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0,~
 #&gt; $ stop_auto_buy_Yes   &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,~
 #&gt; $ rev_stop_Yes        &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~</code></pre>
 </div>
@@ -323,17 +323,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">library</span>(h2o)</span>
 <span id="cb9-2"><a href="#cb9-2"></a><span class="fu">h2o.init</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#&gt;  Connection successful!
+<pre><code>#&gt; 
+#&gt; H2O is not running yet, starting it now...
+#&gt; 
+#&gt; Note:  In case of errors look at the following log files:
+#&gt;     C:\Users\Shahrokh\AppData\Local\Temp\Rtmpec1Ssy\file15543c371190/h2o_Shahrokh_started_from_r.out
+#&gt;     C:\Users\Shahrokh\AppData\Local\Temp\Rtmpec1Ssy\file15544fce2426/h2o_Shahrokh_started_from_r.err
+#&gt; 
+#&gt; 
+#&gt; Starting H2O JVM and connecting: . Connection successful!
 #&gt; 
 #&gt; R is connected to the H2O cluster: 
-#&gt;     H2O cluster uptime:         1 hours 29 minutes 
+#&gt;     H2O cluster uptime:         3 seconds 310 milliseconds 
 #&gt;     H2O cluster timezone:       Europe/Berlin 
 #&gt;     H2O data parsing timezone:  UTC 
 #&gt;     H2O cluster version:        3.40.0.4 
 #&gt;     H2O cluster version age:    1 month and 16 days 
-#&gt;     H2O cluster name:           H2O_started_from_R_Shahrokh_dje900 
+#&gt;     H2O cluster name:           H2O_started_from_R_Shahrokh_nhe595 
 #&gt;     H2O cluster total nodes:    1 
-#&gt;     H2O cluster total memory:   0.79 GB 
+#&gt;     H2O cluster total memory:   0.99 GB 
 #&gt;     H2O cluster total cores:    4 
 #&gt;     H2O cluster allowed cores:  4 
 #&gt;     H2O cluster healthy:        TRUE 
@@ -381,107 +389,107 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   |                                                                      |   0%
   |                                                                            
   |=                                                                     |   1%
-#&gt; 15:03:33.692: User specified a validation frame with cross-validation still enabled. Please note that the models will still be validated using cross-validation only, the validation frame will be used to provide purely informative validation metrics on the trained models.
-#&gt; 15:03:33.694: Stopping tolerance set by the user is &lt; 70% of the recommended default of 0.008512565307587486, so models may take a long time to converge or may not converge at all.
-#&gt; 15:03:33.713: AutoML: XGBoost is not available; skipping it.
-#&gt; 15:03:33.784: _train param, Dropping bad and constant columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
-#&gt; 15:03:33.784: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.
+#&gt; 11:07:52.551: User specified a validation frame with cross-validation still enabled. Please note that the models will still be validated using cross-validation only, the validation frame will be used to provide purely informative validation metrics on the trained models.
+#&gt; 11:07:52.551: Stopping tolerance set by the user is &lt; 70% of the recommended default of 0.008512565307587486, so models may take a long time to converge or may not converge at all.
+#&gt; 11:07:52.597: AutoML: XGBoost is not available; skipping it.
+#&gt; 11:07:52.850: _train param, Dropping bad and constant columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
+#&gt; 11:07:52.850: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.
   |                                                                            
-  |===                                                                   |   4%
-#&gt; 15:03:37.919: _train param, Dropping bad and constant columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
-#&gt; 15:03:37.919: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.
+  |==                                                                    |   3%
+#&gt; 11:07:55.838: _train param, Dropping bad and constant columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
+#&gt; 11:07:55.838: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.
   |                                                                            
-  |==================                                                    |  26%
+  |=====                                                                 |   7%
   |                                                                            
-  |====================                                                  |  28%
+  |===========                                                           |  15%
   |                                                                            
-  |=====================                                                 |  30%
+  |============                                                          |  17%
   |                                                                            
-  |======================                                                |  32%
+  |=============                                                         |  19%
   |                                                                            
-  |========================                                              |  34%
+  |==============                                                        |  20%
+#&gt; 11:08:20.50: _train param, Dropping unused columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
+#&gt; 11:08:20.50: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.
   |                                                                            
-  |=========================                                             |  35%
+  |===============                                                       |  22%
+#&gt; 11:08:23.144: _train param, Dropping bad and constant columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
+#&gt; 11:08:23.144: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.
   |                                                                            
-  |==========================                                            |  38%
+  |===================                                                   |  27%
   |                                                                            
-  |============================                                          |  39%
+  |====================                                                  |  29%
+#&gt; 11:08:33.117: _train param, Dropping bad and constant columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
+#&gt; 11:08:33.117: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.
   |                                                                            
-  |=============================                                         |  41%
-#&gt; 15:04:32.205: _train param, Dropping unused columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
-#&gt; 15:04:32.205: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.
+  |=======================                                               |  33%
   |                                                                            
-  |==============================                                        |  43%
+  |========================                                              |  35%
+#&gt; 11:08:41.279: _train param, Dropping bad and constant columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
+#&gt; 11:08:41.279: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.
   |                                                                            
-  |===============================                                       |  45%
+  |===========================                                           |  39%
+  |                                                                            
+  |============================                                          |  40%
+#&gt; 11:08:49.109: _train param, Dropping bad and constant columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
+#&gt; 11:08:49.110: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.
+  |                                                                            
+  |===============================                                       |  44%
   |                                                                            
   |================================                                      |  46%
-#&gt; 15:04:37.800: _train param, Dropping bad and constant columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
-#&gt; 15:04:37.801: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.
+#&gt; 11:08:57.91: _train param, Dropping unused columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
+#&gt; 11:08:57.91: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.
   |                                                                            
-  |===================================                                   |  51%
+  |=================================                                     |  48%
+#&gt; 11:08:59.98: _train param, Dropping unused columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
+#&gt; 11:08:59.98: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.
   |                                                                            
-  |====================================                                  |  52%
+  |===================================                                   |  49%
+#&gt; 11:09:01.207: _train param, Dropping bad and constant columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
+#&gt; 11:09:01.207: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.
   |                                                                            
   |======================================                                |  54%
-#&gt; 15:04:49.923: _train param, Dropping bad and constant columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
-#&gt; 15:04:49.924: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.
+  |                                                                            
+  |=======================================                               |  55%
+#&gt; 11:09:09.861: _train param, Dropping bad and constant columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
+#&gt; 11:09:09.861: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.
   |                                                                            
   |=========================================                             |  59%
   |                                                                            
-  |===========================================                           |  61%
-  |                                                                            
-  |============================================                          |  62%
+  |==========================================                            |  60%
+#&gt; 11:09:16.41: _train param, Dropping bad and constant columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
+#&gt; 11:09:16.41: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.
   |                                                                            
   |=============================================                         |  64%
-#&gt; 15:05:02.635: _train param, Dropping bad and constant columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
-#&gt; 15:05:02.636: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.
+#&gt; 11:09:21.901: _train param, Dropping unused columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
+#&gt; 11:09:21.901: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.
   |                                                                            
-  |================================================                      |  68%
+  |==============================================                        |  65%
+#&gt; 11:09:23.698: _train param, Dropping unused columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
+#&gt; 11:09:23.698: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.
+  |                                                                            
+  |===============================================                       |  67%
   |                                                                            
   |=================================================                     |  70%
   |                                                                            
   |==================================================                    |  72%
-#&gt; 15:05:15.577: _train param, Dropping bad and constant columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
-#&gt; 15:05:15.578: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.
   |                                                                            
-  |======================================================                |  78%
+  |======================================================                |  77%
+  |                                                                            
+  |=======================================================               |  78%
   |                                                                            
   |========================================================              |  80%
   |                                                                            
-  |=========================================================             |  81%
-  |                                                                            
   |==========================================================            |  83%
-#&gt; 15:05:29.291: _train param, Dropping unused columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
-#&gt; 15:05:29.291: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.
   |                                                                            
-  |===========================================================           |  85%
-#&gt; 15:05:33.50: _train param, Dropping unused columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
-#&gt; 15:05:33.50: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.
+  |===========================================================           |  84%
   |                                                                            
-  |=============================================================         |  88%
+  |============================================================          |  86%
   |                                                                            
-  |==============================================================        |  89%
-#&gt; 15:05:38.474: _train param, Dropping bad and constant columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
-#&gt; 15:05:38.474: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.
+  |================================================================      |  91%
   |                                                                            
-  |================================================================      |  92%
-#&gt; 15:05:41.704: _train param, Dropping bad and constant columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
-#&gt; 15:05:41.705: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.
+  |==================================================================    |  95%
   |                                                                            
-  |==================================================================    |  94%
-#&gt; 15:05:44.940: _train param, Dropping bad and constant columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
-#&gt; 15:05:44.940: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.
-  |                                                                            
-  |====================================================================  |  97%
-#&gt; 15:05:49.271: _train param, Dropping unused columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
-#&gt; 15:05:49.271: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.
-  |                                                                            
-  |===================================================================== |  99%
-  |                                                                            
-  |======================================================================| 100%
-#&gt; 15:05:53.444: _train param, Dropping unused columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
-#&gt; 15:05:53.444: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.</code></pre>
+  |======================================================================| 100%</code></pre>
 </div>
 </div>
 </section><section id="view-the-leaderboard" class="level2" data-number="4"><h2 data-number="4" class="anchored" data-anchor-id="view-the-leaderboard">
@@ -490,21 +498,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>automl_models_h2o<span class="sc">@</span>leaderboard </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt;                                                  model_id      rmse        mse
-#&gt; 1 StackedEnsemble_BestOfFamily_2_AutoML_7_20230613_150333 0.2238527 0.05011002
-#&gt; 2    StackedEnsemble_AllModels_2_AutoML_7_20230613_150333 0.2239285 0.05014395
-#&gt; 3    StackedEnsemble_AllModels_1_AutoML_7_20230613_150333 0.2240410 0.05019439
-#&gt; 4 StackedEnsemble_BestOfFamily_3_AutoML_7_20230613_150333 0.2240663 0.05020570
-#&gt; 5                          GBM_4_AutoML_7_20230613_150333 0.2280299 0.05199763
-#&gt; 6                          GBM_3_AutoML_7_20230613_150333 0.2292833 0.05257081
+#&gt; 1 StackedEnsemble_BestOfFamily_3_AutoML_1_20230614_110752 0.2260784 0.05111146
+#&gt; 2    StackedEnsemble_AllModels_2_AutoML_1_20230614_110752 0.2260897 0.05111653
+#&gt; 3    StackedEnsemble_AllModels_1_AutoML_1_20230614_110752 0.2272044 0.05162185
+#&gt; 4 StackedEnsemble_BestOfFamily_2_AutoML_1_20230614_110752 0.2273878 0.05170522
+#&gt; 5                          GBM_4_AutoML_1_20230614_110752 0.2291999 0.05253261
+#&gt; 6 StackedEnsemble_BestOfFamily_1_AutoML_1_20230614_110752 0.2330037 0.05429072
 #&gt;         mae     rmsle mean_residual_deviance
-#&gt; 1 0.1197909 0.1563357             0.05011002
-#&gt; 2 0.1212188 0.1570722             0.05014395
-#&gt; 3 0.1217558 0.1572235             0.05019439
-#&gt; 4 0.1188522 0.1561823             0.05020570
-#&gt; 5 0.1229130 0.1580747             0.05199763
-#&gt; 6 0.1227182 0.1587060             0.05257081
+#&gt; 1 0.1185425 0.1592269             0.05111146
+#&gt; 2 0.1189984 0.1593067             0.05111653
+#&gt; 3 0.1191355 0.1597273             0.05162185
+#&gt; 4 0.1182341 0.1596554             0.05170522
+#&gt; 5 0.1199089 0.1601677             0.05253261
+#&gt; 6 0.1324803 0.1653251             0.05429072
 #&gt; 
-#&gt; [14 rows x 6 columns]</code></pre>
+#&gt; [20 rows x 6 columns]</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>automl_models_h2o<span class="sc">@</span>leader</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -512,71 +520,72 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 #&gt; ==============
 #&gt; 
 #&gt; H2ORegressionModel: stackedensemble
-#&gt; Model ID:  StackedEnsemble_BestOfFamily_2_AutoML_7_20230613_150333 
+#&gt; Model ID:  StackedEnsemble_BestOfFamily_3_AutoML_1_20230614_110752 
 #&gt; Model Summary for Stacked Ensemble: 
-#&gt;                                     key            value
-#&gt; 1                     Stacking strategy cross_validation
-#&gt; 2  Number of base models (used / total)              2/3
-#&gt; 3      # GBM base models (used / total)              1/1
-#&gt; 4      # DRF base models (used / total)              1/1
-#&gt; 5      # GLM base models (used / total)              0/1
-#&gt; 6                 Metalearner algorithm              GLM
-#&gt; 7    Metalearner fold assignment scheme           Random
-#&gt; 8                    Metalearner nfolds                5
-#&gt; 9               Metalearner fold_column               NA
-#&gt; 10   Custom metalearner hyperparameters             None
+#&gt;                                          key            value
+#&gt; 1                          Stacking strategy cross_validation
+#&gt; 2       Number of base models (used / total)              3/5
+#&gt; 3           # GBM base models (used / total)              1/1
+#&gt; 4           # DRF base models (used / total)              2/2
+#&gt; 5  # DeepLearning base models (used / total)              0/1
+#&gt; 6           # GLM base models (used / total)              0/1
+#&gt; 7                      Metalearner algorithm              GLM
+#&gt; 8         Metalearner fold assignment scheme           Random
+#&gt; 9                         Metalearner nfolds                5
+#&gt; 10                   Metalearner fold_column               NA
+#&gt; 11        Custom metalearner hyperparameters             None
 #&gt; 
 #&gt; 
 #&gt; H2ORegressionMetrics: stackedensemble
 #&gt; ** Reported on training data. **
 #&gt; 
-#&gt; MSE:  0.03118179
-#&gt; RMSE:  0.1765837
-#&gt; MAE:  0.09491372
-#&gt; RMSLE:  0.1240345
-#&gt; Mean Residual Deviance :  0.03118179
+#&gt; MSE:  0.02146429
+#&gt; RMSE:  0.146507
+#&gt; MAE:  0.07564131
+#&gt; RMSLE:  0.1041786
+#&gt; Mean Residual Deviance :  0.02146429
 #&gt; 
 #&gt; 
 #&gt; H2ORegressionMetrics: stackedensemble
 #&gt; ** Reported on validation data. **
 #&gt; 
-#&gt; MSE:  0.05113511
-#&gt; RMSE:  0.2261307
-#&gt; MAE:  0.1187695
-#&gt; RMSLE:  0.1597094
-#&gt; Mean Residual Deviance :  0.05113511
+#&gt; MSE:  0.04901898
+#&gt; RMSE:  0.2214023
+#&gt; MAE:  0.1132232
+#&gt; RMSLE:  0.1551188
+#&gt; Mean Residual Deviance :  0.04901898
 #&gt; 
 #&gt; 
 #&gt; H2ORegressionMetrics: stackedensemble
 #&gt; ** Reported on cross-validation data. **
 #&gt; ** 5-fold cross-validation on training data (Metrics computed for combined holdout predictions) **
 #&gt; 
-#&gt; MSE:  0.05585049
-#&gt; RMSE:  0.2363271
-#&gt; MAE:  0.1281826
-#&gt; RMSLE:  0.1660027
-#&gt; Mean Residual Deviance :  0.05585049
+#&gt; MSE:  0.05079553
+#&gt; RMSE:  0.2253786
+#&gt; MAE:  0.1148825
+#&gt; RMSLE:  0.1586652
+#&gt; Mean Residual Deviance :  0.05079553
 #&gt; 
 #&gt; 
 #&gt; Cross-Validation Metrics Summary: 
-#&gt;                              mean       sd cv_1_valid cv_2_valid cv_3_valid
-#&gt; mae                      0.128143 0.003582   0.128664   0.125750   0.133788
-#&gt; mean_residual_deviance   0.055844 0.003179   0.055055   0.052784   0.061032
-#&gt; mse                      0.055844 0.003179   0.055055   0.052784   0.061032
-#&gt; null_deviance          294.516000 6.591096 298.259860 298.508330 289.537570
-#&gt; r2                       0.476549 0.028720   0.488863   0.507356   0.432752
-#&gt; residual_deviance      154.013980 6.272614 152.447780 147.057460 164.236470
-#&gt; rmse                     0.236238 0.006655   0.234638   0.229749   0.247046
-#&gt; rmsle                    0.165742 0.003994   0.165399   0.161340   0.172139
+#&gt;                              mean        sd cv_1_valid cv_2_valid cv_3_valid
+#&gt; mae                      0.114841  0.003039   0.117218   0.118837   0.111746
+#&gt; mean_residual_deviance   0.050736  0.002342   0.052726   0.053384   0.050029
+#&gt; mse                      0.050736  0.002342   0.052726   0.053384   0.050029
+#&gt; null_deviance          286.679020 20.626400 292.309900 318.461980 275.582950
+#&gt; r2                       0.510150  0.021777   0.499249   0.535458   0.495200
+#&gt; residual_deviance      140.030330  6.727001 146.366400 147.500580 139.031620
+#&gt; rmse                     0.225198  0.005206   0.229621   0.231050   0.223672
+#&gt; rmsle                    0.158399  0.003175   0.161402   0.161320   0.157154
 #&gt;                        cv_4_valid cv_5_valid
-#&gt; mae                      0.128037   0.124477
-#&gt; mean_residual_deviance   0.056324   0.054025
-#&gt; mse                      0.056324   0.054025
-#&gt; null_deviance          300.727480 285.546720
-#&gt; r2                       0.488725   0.465051
-#&gt; residual_deviance      153.708470 152.619700
-#&gt; rmse                     0.237327   0.232432
-#&gt; rmsle                    0.165924   0.163908</code></pre>
+#&gt; mae                      0.112768   0.113637
+#&gt; mean_residual_deviance   0.047601   0.049940
+#&gt; mse                      0.047601   0.049940
+#&gt; null_deviance          283.279600 263.760620
+#&gt; r2                       0.531800   0.489043
+#&gt; residual_deviance      132.615250 134.637830
+#&gt; rmse                     0.218176   0.223472
+#&gt; rmsle                    0.153792   0.158329</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>?h2o.deeplearning</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
@@ -607,7 +616,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 #&gt; i The signature and semantics have changed, see `?as_tibble`.</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>#&gt; StackedEnsemble_AllModels_1_AutoML_2_20230612_12304</code></pre>
+<pre><code>#&gt; StackedEnsemble_BestOfFamily_3_AutoML_1_20230614_110752</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a>predictions <span class="ot">&lt;-</span> <span class="fu">h2o.predict</span>(best_model, <span class="at">newdata =</span> <span class="fu">as.h2o</span>(test_data))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -632,7 +641,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt; Rows: 2,858
 #&gt; Columns: 1
-#&gt; $ predict &lt;dbl&gt; 0.45918184, 0.69144190, 0.08459433, 0.48058109, 0.19629379, 0.~</code></pre>
+#&gt; $ predict &lt;dbl&gt; 0.4612117, 0.1123560, 0.2041894, 0.3293324, 0.6088410, 0.21537~</code></pre>
 </div>
 </div>
 </section><section id="save-the-leader-model" class="level2" data-number="6"><h2 data-number="6" class="anchored" data-anchor-id="save-the-leader-model">
@@ -640,7 +649,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell" data-hash="04_ml04_h2oII_cache/html/unnamed-chunk-6_7d35b2a91c067cde2d8e24bc32e0b77f">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a>best_model <span class="sc">%&gt;%</span> <span class="fu">h2o.saveModel</span>(<span class="at">path =</span> <span class="st">"data04/model"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#&gt; [1] "C:\\Users\\Shahrokh\\Documents\\GitHub\\ss23-bdml-shahrokh-vahedi\\content\\01_journal\\data04\\model\\StackedEnsemble_AllModels_1_AutoML_1_20230612_05038"</code></pre>
+<pre><code>#&gt; [1] "C:\\Users\\Shahrokh\\Documents\\GitHub\\ss23-bdml-shahrokh-vahedi\\content\\01_journal\\data04\\model\\StackedEnsemble_BestOfFamily_3_AutoML_1_20230614_110752"</code></pre>
 </div>
 </div>
 
