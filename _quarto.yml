@@ -6,7 +6,7 @@ execute:
   cache: true
 
 website:
-  title: "MyLabJournal-Business Decisions with Machine Learning"
+  title: "Business Decisions with Machine Learning"
   navbar:
     left:
       - href: index.qmd
@@ -24,7 +24,7 @@ website:
           - text: "05 Performance Measures"
             file: content/01_journal/05_ml05_perf_meas.rmd
           - text: "06 Explaining Black-Box Models With LIME"
-            file: content/01_journal/06_ml06_lime.qmd
+            file: content/01_journal/06_ml06_lime.rmd
 
 format:
   html:
