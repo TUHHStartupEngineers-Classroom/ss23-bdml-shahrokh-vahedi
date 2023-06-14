@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.335">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta name="author" content="Shahrokh Vahedi">
+<meta name="dcterms.date" content="2023-06-10">
+<title>MyLabJournal-Business Decisions with Machine Learning - 04 Automated Machine Learning with H2O (II)</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark"><script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script><link href="../../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="../../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+</head>
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg navbar-dark "><div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">MyLabJournal-Business Decisions with Machine Learning</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+<li class="nav-item">
+    <a class="nav-link" href="../../index.html">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-journal" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Journal</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-journal">
+<li>
+    <a class="dropdown-item" href="../../content/01_journal/01_ml01_ml_fund.html">
+ <span class="dropdown-text">01 Machine Learning Fundamentals</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../content/01_journal/02_ml02_sup_ML.html">
+ <span class="dropdown-text">02 Supervised ML - Regression</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../content/01_journal/03_ml03_h2oI.html">
+ <span class="dropdown-text">03 Automated Machine Learning with H2O (I)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../content/01_journal/04_ml04_h2oII.html">
+ <span class="dropdown-text">04 Automated Machine Learning with H2O (II)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../content/01_journal/05_ml05_perf_meas.html">
+ <span class="dropdown-text">05 Performance Measures</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../content/01_journal/06_ml06_lime.html">
+ <span class="dropdown-text">06 Explaining Black-Box Models With LIME</span></a>
+  </li>  
+    </ul>
+</li>
+</ul>
+<div class="quarto-toggle-container">
+                  <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+              </div>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Contents</h2>
+   
+  <ul class="collapse">
+<li><a href="#load-the-training-test-dataset" id="toc-load-the-training-test-dataset" class="nav-link active" data-scroll-target="#load-the-training-test-dataset"><span class="toc-section-number">1</span>  Load the training &amp; test dataset</a></li>
+  <li><a href="#specifiy-the-response-and-predictor-variables" id="toc-specifiy-the-response-and-predictor-variables" class="nav-link" data-scroll-target="#specifiy-the-response-and-predictor-variables"><span class="toc-section-number">2</span>  Specifiy the response and predictor variables</a></li>
+  <li><a href="#run-automl-specifying-the-stopping-criterion" id="toc-run-automl-specifying-the-stopping-criterion" class="nav-link" data-scroll-target="#run-automl-specifying-the-stopping-criterion"><span class="toc-section-number">3</span>  run AutoML specifying the stopping criterion</a></li>
+  <li><a href="#view-the-leaderboard" id="toc-view-the-leaderboard" class="nav-link" data-scroll-target="#view-the-leaderboard"><span class="toc-section-number">4</span>  View the leaderboard</a></li>
+  <li><a href="#predicting-using-leader-model" id="toc-predicting-using-leader-model" class="nav-link" data-scroll-target="#predicting-using-leader-model"><span class="toc-section-number">5</span>  Predicting using Leader Model</a></li>
+  <li><a href="#save-the-leader-model" id="toc-save-the-leader-model" class="nav-link" data-scroll-target="#save-the-leader-model"><span class="toc-section-number">6</span>  Save the leader model</a></li>
+  </ul></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<h1 class="title">04 Automated Machine Learning with H2O (II)</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Shahrokh Vahedi </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">June 10, 2023</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header><section id="load-the-training-test-dataset" class="level2" data-number="1"><h2 data-number="1" class="anchored" data-anchor-id="load-the-training-test-dataset">
+<span class="header-section-number">1</span> Load the training &amp; test dataset</h2>
+<div class="cell" data-hash="04_ml04_h2oII_cache/html/unnamed-chunk-1_e72c6a0b51937526b04ef5abcbeff50d">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">library</span>(recipes)</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="fu">library</span>(rsample)</span>
+<span id="cb1-4"><a href="#cb1-4"></a></span>
+<span id="cb1-5"><a href="#cb1-5"></a>dataset <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data04/product_backorders.csv"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-6"><a href="#cb1-6"></a>  <span class="fu">mutate</span>(<span class="at">product_backorder =</span> went_on_backorder <span class="sc">%&gt;%</span> <span class="fu">str_to_lower</span>() <span class="sc">%&gt;%</span> <span class="fu">str_detect</span>(<span class="st">"yes"</span>) <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>()) <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(went_on_backorder))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>#&gt; Rows: 19053 Columns: 23
+#&gt; -- Column specification --------------------------------------------------------
+#&gt; Delimiter: ","
+#&gt; chr  (7): potential_issue, deck_risk, oe_constraint, ppap_risk, stop_auto_bu...
+#&gt; dbl (16): sku, national_inv, lead_time, in_transit_qty, forecast_3_month, fo...
+#&gt; 
+#&gt; i Use `spec()` to retrieve the full column specification for this data.
+#&gt; i Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">glimpse</span>(dataset)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; Rows: 19,053
+#&gt; Columns: 23
+#&gt; $ sku               &lt;dbl&gt; 1113121, 1113268, 1113874, 1114222, 1114823, 1115453~
+#&gt; $ national_inv      &lt;dbl&gt; 0, 0, 20, 0, 0, 55, -34, 4, 2, -7, 1, 2, 0, 0, 0, 0,~
+#&gt; $ lead_time         &lt;dbl&gt; 8, 8, 2, 8, 12, 8, 8, 9, 8, 8, 8, 8, 12, 2, 12, 4, 2~
+#&gt; $ in_transit_qty    &lt;dbl&gt; 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0~
+#&gt; $ forecast_3_month  &lt;dbl&gt; 6, 2, 45, 9, 31, 216, 120, 43, 4, 56, 2, 5, 5, 54, 4~
+#&gt; $ forecast_6_month  &lt;dbl&gt; 6, 3, 99, 14, 31, 360, 240, 67, 6, 96, 4, 9, 6, 72, ~
+#&gt; $ forecast_9_month  &lt;dbl&gt; 6, 4, 153, 21, 31, 492, 240, 115, 9, 112, 6, 13, 9, ~
+#&gt; $ sales_1_month     &lt;dbl&gt; 0, 1, 16, 5, 7, 30, 83, 5, 1, 13, 0, 1, 0, 0, 1, 0, ~
+#&gt; $ sales_3_month     &lt;dbl&gt; 4, 2, 42, 17, 15, 108, 122, 22, 5, 30, 2, 5, 4, 0, 3~
+#&gt; $ sales_6_month     &lt;dbl&gt; 9, 3, 80, 36, 33, 275, 144, 40, 6, 56, 3, 8, 5, 0, 4~
+#&gt; $ sales_9_month     &lt;dbl&gt; 12, 3, 111, 43, 47, 340, 165, 58, 9, 76, 4, 11, 6, 0~
+#&gt; $ min_bank          &lt;dbl&gt; 0, 0, 10, 0, 2, 51, 33, 4, 2, 0, 0, 0, 3, 4, 0, 0, 0~
+#&gt; $ potential_issue   &lt;chr&gt; "No", "No", "No", "No", "No", "No", "No", "No", "No"~
+#&gt; $ pieces_past_due   &lt;dbl&gt; 1, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0~
+#&gt; $ perf_6_month_avg  &lt;dbl&gt; 0.90, 0.96, 0.81, 0.96, 0.98, 0.00, 1.00, 0.69, 1.00~
+#&gt; $ perf_12_month_avg &lt;dbl&gt; 0.89, 0.97, 0.88, 0.98, 0.98, 0.00, 0.97, 0.68, 0.95~
+#&gt; $ local_bo_qty      &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 34, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, ~
+#&gt; $ deck_risk         &lt;chr&gt; "No", "No", "No", "No", "No", "No", "No", "No", "No"~
+#&gt; $ oe_constraint     &lt;chr&gt; "No", "No", "No", "No", "No", "No", "No", "No", "No"~
+#&gt; $ ppap_risk         &lt;chr&gt; "No", "No", "No", "No", "No", "Yes", "No", "No", "No~
+#&gt; $ stop_auto_buy     &lt;chr&gt; "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Ye~
+#&gt; $ rev_stop          &lt;chr&gt; "No", "No", "No", "No", "No", "No", "No", "No", "No"~
+#&gt; $ product_backorder &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1~</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>split_obj<span class="ot">&lt;-</span> <span class="fu">initial_split</span>(dataset, <span class="at">prop =</span> <span class="fl">0.85</span>)</span>
+<span id="cb5-2"><a href="#cb5-2"></a>train_data<span class="ot">&lt;-</span> <span class="fu">training</span>(split_obj)</span>
+<span id="cb5-3"><a href="#cb5-3"></a>test_data<span class="ot">&lt;-</span> <span class="fu">testing</span>(split_obj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section><section id="specifiy-the-response-and-predictor-variables" class="level2" data-number="2"><h2 data-number="2" class="anchored" data-anchor-id="specifiy-the-response-and-predictor-variables">
+<span class="header-section-number">2</span> Specifiy the response and predictor variables</h2>
+<div class="cell" data-hash="04_ml04_h2oII_cache/html/unnamed-chunk-2_e5a18dda196bebcd6d04b99362dee04a">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>recipe_obj <span class="ot">&lt;-</span> <span class="fu">recipe</span>(product_backorder <span class="sc">~</span>., <span class="at">data =</span> train_data) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-2"><a href="#cb6-2"></a>    <span class="fu">step_zv</span>(<span class="fu">all_predictors</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-3"><a href="#cb6-3"></a>    <span class="fu">step_dummy</span>(<span class="fu">all_nominal</span>(),<span class="sc">-</span><span class="fu">all_outcomes</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a>    <span class="fu">prep</span>()</span>
+<span id="cb6-5"><a href="#cb6-5"></a></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="fu">summary</span>(recipe_obj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["variable"],"name":[1],"type":["chr"],"align":["left"]},{"label":["type"],"name":[2],"type":["list"],"align":["right"]},{"label":["role"],"name":[3],"type":["chr"],"align":["left"]},{"label":["source"],"name":[4],"type":["chr"],"align":["left"]}],"data":[{"1":"sku","2":"<chr [2]>","3":"predictor","4":"original"},{"1":"national_inv","2":"<chr [2]>","3":"predictor","4":"original"},{"1":"lead_time","2":"<chr [2]>","3":"predictor","4":"original"},{"1":"in_transit_qty","2":"<chr [2]>","3":"predictor","4":"original"},{"1":"forecast_3_month","2":"<chr [2]>","3":"predictor","4":"original"},{"1":"forecast_6_month","2":"<chr [2]>","3":"predictor","4":"original"},{"1":"forecast_9_month","2":"<chr [2]>","3":"predictor","4":"original"},{"1":"sales_1_month","2":"<chr [2]>","3":"predictor","4":"original"},{"1":"sales_3_month","2":"<chr [2]>","3":"predictor","4":"original"},{"1":"sales_6_month","2":"<chr [2]>","3":"predictor","4":"original"},{"1":"sales_9_month","2":"<chr [2]>","3":"predictor","4":"original"},{"1":"min_bank","2":"<chr [2]>","3":"predictor","4":"original"},{"1":"pieces_past_due","2":"<chr [2]>","3":"predictor","4":"original"},{"1":"perf_6_month_avg","2":"<chr [2]>","3":"predictor","4":"original"},{"1":"perf_12_month_avg","2":"<chr [2]>","3":"predictor","4":"original"},{"1":"local_bo_qty","2":"<chr [2]>","3":"predictor","4":"original"},{"1":"product_backorder","2":"<chr [2]>","3":"outcome","4":"original"},{"1":"potential_issue_Yes","2":"<chr [2]>","3":"predictor","4":"derived"},{"1":"deck_risk_Yes","2":"<chr [2]>","3":"predictor","4":"derived"},{"1":"oe_constraint_Yes","2":"<chr [2]>","3":"predictor","4":"derived"},{"1":"ppap_risk_Yes","2":"<chr [2]>","3":"predictor","4":"derived"},{"1":"stop_auto_buy_Yes","2":"<chr [2]>","3":"predictor","4":"derived"},{"1":"rev_stop_Yes","2":"<chr [2]>","3":"predictor","4":"derived"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">glimpse</span>(<span class="fu">bake</span>(recipe_obj,<span class="at">new_data =</span> <span class="cn">NULL</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; Rows: 16,195
+#&gt; Columns: 23
+#&gt; $ sku                 &lt;dbl&gt; 2003094, 1446382, 1181601, 2041493, 2898957, 19291~
+#&gt; $ national_inv        &lt;dbl&gt; 0, 2, 616, 10, 97, 33, 5, 8, 11, 508, 2, 6, 2, 3, ~
+#&gt; $ lead_time           &lt;dbl&gt; 4, 2, 2, 8, 2, 8, 2, 2, 8, 8, 9, 8, 12, 4, 14, 8, ~
+#&gt; $ in_transit_qty      &lt;dbl&gt; 0, 0, 0, 0, 27, 0, 0, 0, 0, 123, 0, 0, 0, 3, 0, 9,~
+#&gt; $ forecast_3_month    &lt;dbl&gt; 11, 0, 0, 0, 273, 0, 0, 0, 0, 1734, 0, 2, 0, 0, 0,~
+#&gt; $ forecast_6_month    &lt;dbl&gt; 11, 0, 0, 0, 525, 0, 0, 0, 3, 2690, 0, 8, 0, 2, 0,~
+#&gt; $ forecast_9_month    &lt;dbl&gt; 11, 0, 0, 0, 735, 13, 0, 1, 12, 2920, 0, 16, 0, 3,~
+#&gt; $ sales_1_month       &lt;dbl&gt; 0, 0, 1, 0, 73, 5, 0, 0, 5, 181, 0, 0, 0, 0, 0, 48~
+#&gt; $ sales_3_month       &lt;dbl&gt; 0, 0, 2, 0, 224, 22, 0, 1, 9, 572, 0, 4, 0, 2, 0, ~
+#&gt; $ sales_6_month       &lt;dbl&gt; 0, 0, 5, 0, 450, 38, 0, 2, 20, 1342, 0, 11, 0, 6, ~
+#&gt; $ sales_9_month       &lt;dbl&gt; 0, 0, 6, 0, 682, 67, 0, 2, 24, 3138, 0, 13, 0, 7, ~
+#&gt; $ min_bank            &lt;dbl&gt; 1, 0, 0, 1, 53, 5, 0, 0, 0, 209, 0, 0, 0, 0, 0, 96~
+#&gt; $ pieces_past_due     &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+#&gt; $ perf_6_month_avg    &lt;dbl&gt; 0.24, 0.98, 0.99, 0.99, 0.93, 0.99, 0.99, 0.77, 0.~
+#&gt; $ perf_12_month_avg   &lt;dbl&gt; 0.14, 0.95, 0.97, 0.99, 0.89, 0.99, 0.99, 0.49, 0.~
+#&gt; $ local_bo_qty        &lt;dbl&gt; 0, 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0~
+#&gt; $ product_backorder   &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+#&gt; $ potential_issue_Yes &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+#&gt; $ deck_risk_Yes       &lt;dbl&gt; 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+#&gt; $ oe_constraint_Yes   &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+#&gt; $ ppap_risk_Yes       &lt;dbl&gt; 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,~
+#&gt; $ stop_auto_buy_Yes   &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,~
+#&gt; $ rev_stop_Yes        &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~</code></pre>
+</div>
+</div>
+</section><section id="run-automl-specifying-the-stopping-criterion" class="level2" data-number="3"><h2 data-number="3" class="anchored" data-anchor-id="run-automl-specifying-the-stopping-criterion">
+<span class="header-section-number">3</span> run AutoML specifying the stopping criterion</h2>
+<div class="cell" data-hash="04_ml04_h2oII_cache/html/unnamed-chunk-3_2eb44ef7d5cda0372a5acd6ef06fc6e0">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">library</span>(h2o)</span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="fu">h2o.init</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt;  Connection successful!
+#&gt; 
+#&gt; R is connected to the H2O cluster: 
+#&gt;     H2O cluster uptime:         1 hours 29 minutes 
+#&gt;     H2O cluster timezone:       Europe/Berlin 
+#&gt;     H2O data parsing timezone:  UTC 
+#&gt;     H2O cluster version:        3.40.0.4 
+#&gt;     H2O cluster version age:    1 month and 16 days 
+#&gt;     H2O cluster name:           H2O_started_from_R_Shahrokh_dje900 
+#&gt;     H2O cluster total nodes:    1 
+#&gt;     H2O cluster total memory:   0.79 GB 
+#&gt;     H2O cluster total cores:    4 
+#&gt;     H2O cluster allowed cores:  4 
+#&gt;     H2O cluster healthy:        TRUE 
+#&gt;     H2O Connection ip:          localhost 
+#&gt;     H2O Connection port:        54321 
+#&gt;     H2O Connection proxy:       NA 
+#&gt;     H2O Internal Security:      FALSE 
+#&gt;     R Version:                  R version 4.3.0 (2023-04-21 ucrt)</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>split_h2o <span class="ot">&lt;-</span> <span class="fu">h2o.splitFrame</span>(<span class="fu">as.h2o</span>(train_data), <span class="at">ratios =</span> <span class="fu">c</span>(<span class="fl">0.85</span>), <span class="at">seed =</span> <span class="dv">52</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; 
+  |                                                                            
+  |                                                                      |   0%
+  |                                                                            
+  |======================================================================| 100%</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>train_h2o <span class="ot">&lt;-</span> split_h2o[[<span class="dv">1</span>]]</span>
+<span id="cb13-2"><a href="#cb13-2"></a>valid_h2o <span class="ot">&lt;-</span> split_h2o[[<span class="dv">2</span>]]</span>
+<span id="cb13-3"><a href="#cb13-3"></a>test_h2o  <span class="ot">&lt;-</span> <span class="fu">as.h2o</span>(test_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; 
+  |                                                                            
+  |                                                                      |   0%
+  |                                                                            
+  |======================================================================| 100%</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="co"># Set the target and predictors</span></span>
+<span id="cb15-2"><a href="#cb15-2"></a>y <span class="ot">&lt;-</span> <span class="st">"product_backorder"</span></span>
+<span id="cb15-3"><a href="#cb15-3"></a>x <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(<span class="fu">names</span>(train_h2o), y)</span>
+<span id="cb15-4"><a href="#cb15-4"></a>automl_models_h2o <span class="ot">&lt;-</span> <span class="fu">h2o.automl</span>(</span>
+<span id="cb15-5"><a href="#cb15-5"></a>  <span class="at">x =</span> x,</span>
+<span id="cb15-6"><a href="#cb15-6"></a>  <span class="at">y =</span> y,</span>
+<span id="cb15-7"><a href="#cb15-7"></a>  <span class="at">training_frame    =</span> train_h2o,</span>
+<span id="cb15-8"><a href="#cb15-8"></a>  <span class="at">validation_frame  =</span> valid_h2o,</span>
+<span id="cb15-9"><a href="#cb15-9"></a>  <span class="at">leaderboard_frame =</span> test_h2o,</span>
+<span id="cb15-10"><a href="#cb15-10"></a>  <span class="at">max_runtime_secs  =</span> <span class="dv">140</span>,</span>
+<span id="cb15-11"><a href="#cb15-11"></a>  <span class="at">nfolds            =</span> <span class="dv">5</span>,</span>
+<span id="cb15-12"><a href="#cb15-12"></a>  <span class="at">stopping_metric =</span> <span class="st">"mae"</span>, <span class="at">stopping_rounds =</span> <span class="dv">3</span>,</span>
+<span id="cb15-13"><a href="#cb15-13"></a>                        <span class="at">stopping_tolerance =</span> <span class="fl">1e-3</span></span>
+<span id="cb15-14"><a href="#cb15-14"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; 
+  |                                                                            
+  |                                                                      |   0%
+  |                                                                            
+  |=                                                                     |   1%
+#&gt; 15:03:33.692: User specified a validation frame with cross-validation still enabled. Please note that the models will still be validated using cross-validation only, the validation frame will be used to provide purely informative validation metrics on the trained models.
+#&gt; 15:03:33.694: Stopping tolerance set by the user is &lt; 70% of the recommended default of 0.008512565307587486, so models may take a long time to converge or may not converge at all.
+#&gt; 15:03:33.713: AutoML: XGBoost is not available; skipping it.
+#&gt; 15:03:33.784: _train param, Dropping bad and constant columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
+#&gt; 15:03:33.784: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.
+  |                                                                            
+  |===                                                                   |   4%
+#&gt; 15:03:37.919: _train param, Dropping bad and constant columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
+#&gt; 15:03:37.919: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.
+  |                                                                            
+  |==================                                                    |  26%
+  |                                                                            
+  |====================                                                  |  28%
+  |                                                                            
+  |=====================                                                 |  30%
+  |                                                                            
+  |======================                                                |  32%
+  |                                                                            
+  |========================                                              |  34%
+  |                                                                            
+  |=========================                                             |  35%
+  |                                                                            
+  |==========================                                            |  38%
+  |                                                                            
+  |============================                                          |  39%
+  |                                                                            
+  |=============================                                         |  41%
+#&gt; 15:04:32.205: _train param, Dropping unused columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
+#&gt; 15:04:32.205: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.
+  |                                                                            
+  |==============================                                        |  43%
+  |                                                                            
+  |===============================                                       |  45%
+  |                                                                            
+  |================================                                      |  46%
+#&gt; 15:04:37.800: _train param, Dropping bad and constant columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
+#&gt; 15:04:37.801: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.
+  |                                                                            
+  |===================================                                   |  51%
+  |                                                                            
+  |====================================                                  |  52%
+  |                                                                            
+  |======================================                                |  54%
+#&gt; 15:04:49.923: _train param, Dropping bad and constant columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
+#&gt; 15:04:49.924: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.
+  |                                                                            
+  |=========================================                             |  59%
+  |                                                                            
+  |===========================================                           |  61%
+  |                                                                            
+  |============================================                          |  62%
+  |                                                                            
+  |=============================================                         |  64%
+#&gt; 15:05:02.635: _train param, Dropping bad and constant columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
+#&gt; 15:05:02.636: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.
+  |                                                                            
+  |================================================                      |  68%
+  |                                                                            
+  |=================================================                     |  70%
+  |                                                                            
+  |==================================================                    |  72%
+#&gt; 15:05:15.577: _train param, Dropping bad and constant columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
+#&gt; 15:05:15.578: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.
+  |                                                                            
+  |======================================================                |  78%
+  |                                                                            
+  |========================================================              |  80%
+  |                                                                            
+  |=========================================================             |  81%
+  |                                                                            
+  |==========================================================            |  83%
+#&gt; 15:05:29.291: _train param, Dropping unused columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
+#&gt; 15:05:29.291: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.
+  |                                                                            
+  |===========================================================           |  85%
+#&gt; 15:05:33.50: _train param, Dropping unused columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
+#&gt; 15:05:33.50: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.
+  |                                                                            
+  |=============================================================         |  88%
+  |                                                                            
+  |==============================================================        |  89%
+#&gt; 15:05:38.474: _train param, Dropping bad and constant columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
+#&gt; 15:05:38.474: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.
+  |                                                                            
+  |================================================================      |  92%
+#&gt; 15:05:41.704: _train param, Dropping bad and constant columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
+#&gt; 15:05:41.705: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.
+  |                                                                            
+  |==================================================================    |  94%
+#&gt; 15:05:44.940: _train param, Dropping bad and constant columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
+#&gt; 15:05:44.940: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.
+  |                                                                            
+  |====================================================================  |  97%
+#&gt; 15:05:49.271: _train param, Dropping unused columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
+#&gt; 15:05:49.271: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.
+  |                                                                            
+  |===================================================================== |  99%
+  |                                                                            
+  |======================================================================| 100%
+#&gt; 15:05:53.444: _train param, Dropping unused columns: [potential_issue, ppap_risk, rev_stop, stop_auto_buy, deck_risk, oe_constraint]
+#&gt; 15:05:53.444: _response param, We have detected that your response column has only 2 unique values (0/1). If you wish to train a binary model instead of a regression model, convert your target column to categorical before training.</code></pre>
+</div>
+</div>
+</section><section id="view-the-leaderboard" class="level2" data-number="4"><h2 data-number="4" class="anchored" data-anchor-id="view-the-leaderboard">
+<span class="header-section-number">4</span> View the leaderboard</h2>
+<div class="cell" data-hash="04_ml04_h2oII_cache/html/unnamed-chunk-4_0ba2f15d38d2c07e348ab1cf3726ae7c">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>automl_models_h2o<span class="sc">@</span>leaderboard </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt;                                                  model_id      rmse        mse
+#&gt; 1 StackedEnsemble_BestOfFamily_2_AutoML_7_20230613_150333 0.2238527 0.05011002
+#&gt; 2    StackedEnsemble_AllModels_2_AutoML_7_20230613_150333 0.2239285 0.05014395
+#&gt; 3    StackedEnsemble_AllModels_1_AutoML_7_20230613_150333 0.2240410 0.05019439
+#&gt; 4 StackedEnsemble_BestOfFamily_3_AutoML_7_20230613_150333 0.2240663 0.05020570
+#&gt; 5                          GBM_4_AutoML_7_20230613_150333 0.2280299 0.05199763
+#&gt; 6                          GBM_3_AutoML_7_20230613_150333 0.2292833 0.05257081
+#&gt;         mae     rmsle mean_residual_deviance
+#&gt; 1 0.1197909 0.1563357             0.05011002
+#&gt; 2 0.1212188 0.1570722             0.05014395
+#&gt; 3 0.1217558 0.1572235             0.05019439
+#&gt; 4 0.1188522 0.1561823             0.05020570
+#&gt; 5 0.1229130 0.1580747             0.05199763
+#&gt; 6 0.1227182 0.1587060             0.05257081
+#&gt; 
+#&gt; [14 rows x 6 columns]</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>automl_models_h2o<span class="sc">@</span>leader</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; Model Details:
+#&gt; ==============
+#&gt; 
+#&gt; H2ORegressionModel: stackedensemble
+#&gt; Model ID:  StackedEnsemble_BestOfFamily_2_AutoML_7_20230613_150333 
+#&gt; Model Summary for Stacked Ensemble: 
+#&gt;                                     key            value
+#&gt; 1                     Stacking strategy cross_validation
+#&gt; 2  Number of base models (used / total)              2/3
+#&gt; 3      # GBM base models (used / total)              1/1
+#&gt; 4      # DRF base models (used / total)              1/1
+#&gt; 5      # GLM base models (used / total)              0/1
+#&gt; 6                 Metalearner algorithm              GLM
+#&gt; 7    Metalearner fold assignment scheme           Random
+#&gt; 8                    Metalearner nfolds                5
+#&gt; 9               Metalearner fold_column               NA
+#&gt; 10   Custom metalearner hyperparameters             None
+#&gt; 
+#&gt; 
+#&gt; H2ORegressionMetrics: stackedensemble
+#&gt; ** Reported on training data. **
+#&gt; 
+#&gt; MSE:  0.03118179
+#&gt; RMSE:  0.1765837
+#&gt; MAE:  0.09491372
+#&gt; RMSLE:  0.1240345
+#&gt; Mean Residual Deviance :  0.03118179
+#&gt; 
+#&gt; 
+#&gt; H2ORegressionMetrics: stackedensemble
+#&gt; ** Reported on validation data. **
+#&gt; 
+#&gt; MSE:  0.05113511
+#&gt; RMSE:  0.2261307
+#&gt; MAE:  0.1187695
+#&gt; RMSLE:  0.1597094
+#&gt; Mean Residual Deviance :  0.05113511
+#&gt; 
+#&gt; 
+#&gt; H2ORegressionMetrics: stackedensemble
+#&gt; ** Reported on cross-validation data. **
+#&gt; ** 5-fold cross-validation on training data (Metrics computed for combined holdout predictions) **
+#&gt; 
+#&gt; MSE:  0.05585049
+#&gt; RMSE:  0.2363271
+#&gt; MAE:  0.1281826
+#&gt; RMSLE:  0.1660027
+#&gt; Mean Residual Deviance :  0.05585049
+#&gt; 
+#&gt; 
+#&gt; Cross-Validation Metrics Summary: 
+#&gt;                              mean       sd cv_1_valid cv_2_valid cv_3_valid
+#&gt; mae                      0.128143 0.003582   0.128664   0.125750   0.133788
+#&gt; mean_residual_deviance   0.055844 0.003179   0.055055   0.052784   0.061032
+#&gt; mse                      0.055844 0.003179   0.055055   0.052784   0.061032
+#&gt; null_deviance          294.516000 6.591096 298.259860 298.508330 289.537570
+#&gt; r2                       0.476549 0.028720   0.488863   0.507356   0.432752
+#&gt; residual_deviance      154.013980 6.272614 152.447780 147.057460 164.236470
+#&gt; rmse                     0.236238 0.006655   0.234638   0.229749   0.247046
+#&gt; rmsle                    0.165742 0.003994   0.165399   0.161340   0.172139
+#&gt;                        cv_4_valid cv_5_valid
+#&gt; mae                      0.128037   0.124477
+#&gt; mean_residual_deviance   0.056324   0.054025
+#&gt; mse                      0.056324   0.054025
+#&gt; null_deviance          300.727480 285.546720
+#&gt; r2                       0.488725   0.465051
+#&gt; residual_deviance      153.708470 152.619700
+#&gt; rmse                     0.237327   0.232432
+#&gt; rmsle                    0.165924   0.163908</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>?h2o.deeplearning</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>#&gt; starting httpd help server ... done</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>extract_h2o_model_name_by_position <span class="ot">&lt;-</span> <span class="cf">function</span>(h2o_leaderboard, <span class="at">n =</span> <span class="dv">1</span>, <span class="at">verbose =</span> T) {</span>
+<span id="cb23-2"><a href="#cb23-2"></a>    model_name <span class="ot">&lt;-</span> h2o_leaderboard <span class="sc">%&gt;%</span></span>
+<span id="cb23-3"><a href="#cb23-3"></a>        <span class="fu">as.tibble</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb23-4"><a href="#cb23-4"></a>        <span class="fu">slice_</span>(n) <span class="sc">%&gt;%</span></span>
+<span id="cb23-5"><a href="#cb23-5"></a>        <span class="fu">pull</span>(model_id)</span>
+<span id="cb23-6"><a href="#cb23-6"></a>    <span class="cf">if</span> (verbose) <span class="fu">message</span>(model_name)</span>
+<span id="cb23-7"><a href="#cb23-7"></a>    <span class="fu">return</span>(model_name)</span>
+<span id="cb23-8"><a href="#cb23-8"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section><section id="predicting-using-leader-model" class="level2" data-number="5"><h2 data-number="5" class="anchored" data-anchor-id="predicting-using-leader-model">
+<span class="header-section-number">5</span> Predicting using Leader Model</h2>
+<div class="cell" data-hash="04_ml04_h2oII_cache/html/unnamed-chunk-5_457f423cb9a3da3176771272aef2e95b">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>best_model <span class="ot">&lt;-</span> automl_models_h2o<span class="sc">@</span>leaderboard <span class="sc">%&gt;%</span> </span>
+<span id="cb24-2"><a href="#cb24-2"></a>  <span class="fu">extract_h2o_model_name_by_position</span>(<span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-3"><a href="#cb24-3"></a>  <span class="fu">h2o.getModel</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>#&gt; Warning: `slice_()` was deprecated in dplyr 0.7.0.
+#&gt; i Please use `slice()` instead.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>#&gt; Warning: `as.tibble()` was deprecated in tibble 2.0.0.
+#&gt; i Please use `as_tibble()` instead.
+#&gt; i The signature and semantics have changed, see `?as_tibble`.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>#&gt; StackedEnsemble_AllModels_1_AutoML_2_20230612_12304</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a>predictions <span class="ot">&lt;-</span> <span class="fu">h2o.predict</span>(best_model, <span class="at">newdata =</span> <span class="fu">as.h2o</span>(test_data))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; 
+  |                                                                            
+  |                                                                      |   0%
+  |                                                                            
+  |======================================================================| 100%
+#&gt; 
+  |                                                                            
+  |                                                                      |   0%
+  |                                                                            
+  |======================================================================| 100%</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="fu">typeof</span>(predictions)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; [1] "environment"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a>predictions_tbl <span class="ot">&lt;-</span> predictions <span class="sc">%&gt;%</span> <span class="fu">as_tibble</span>()</span>
+<span id="cb32-2"><a href="#cb32-2"></a></span>
+<span id="cb32-3"><a href="#cb32-3"></a><span class="fu">glimpse</span>(predictions_tbl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; Rows: 2,858
+#&gt; Columns: 1
+#&gt; $ predict &lt;dbl&gt; 0.45918184, 0.69144190, 0.08459433, 0.48058109, 0.19629379, 0.~</code></pre>
+</div>
+</div>
+</section><section id="save-the-leader-model" class="level2" data-number="6"><h2 data-number="6" class="anchored" data-anchor-id="save-the-leader-model">
+<span class="header-section-number">6</span> Save the leader model</h2>
+<div class="cell" data-hash="04_ml04_h2oII_cache/html/unnamed-chunk-6_7d35b2a91c067cde2d8e24bc32e0b77f">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a>best_model <span class="sc">%&gt;%</span> <span class="fu">h2o.saveModel</span>(<span class="at">path =</span> <span class="st">"data04/model"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; [1] "C:\\Users\\Shahrokh\\Documents\\GitHub\\ss23-bdml-shahrokh-vahedi\\content\\01_journal\\data04\\model\\StackedEnsemble_AllModels_1_AutoML_1_20230612_05038"</code></pre>
+</div>
+</div>
+
+
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'alternate';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
